@@ -8,6 +8,7 @@
 #include "escher/base/time.h"
 #include "escher/geometry/quad.h"
 #include "escher/geometry/size_i.h"
+#include "escher/scene/stage.h"
 #include "escher/shaders/solid_color_shader.h"
 
 namespace escher {
@@ -23,8 +24,8 @@ class Renderer {
   void Render(TimePoint frame_time);
 
  private:
+  Stage stage_;
   SolidColorShader solid_color_shader_;
-  SizeI size_;
   Quad quad_;
 
   ESCHER_DISALLOW_COPY_AND_ASSIGN(Renderer);

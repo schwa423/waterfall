@@ -12,6 +12,14 @@
 #include <utility>
 
 namespace escher {
+namespace {
+
+// Material design places objects from 0.0f to 24.0f. We inflate that range
+// slightly to avoid clipping at the edges of the viewing volume.
+constexpr float kNear = 25.0f;
+constexpr float kFar = -1.0f;
+
+}  // namespace
 
 Renderer::Renderer() {
 }
@@ -24,8 +32,6 @@ bool Renderer::Init() {
 
   if (!solid_color_shader_.Compile())
     return false;
-  
-  quad_ = Quad::CreateFromRect(Vector2(-0.5, -0.5), Vector2(1.0, 1.0), 0.0);
 
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glCullFace(GL_BACK);
@@ -34,16 +40,18 @@ bool Renderer::Init() {
 }
 
 void Renderer::SetSize(SizeI size) {
-  size_ = std::move(size);
+  quad_ = Quad::CreateFromRect(Vector2(10.0f, 5.0f),
+                               Vector2(size.width() / 2.0f,
+                                       size.height() / 2.0f),
+                               0.0);
+  stage_.set_viewing_volume(ViewingVolume(std::move(size), kNear, kFar));
 }
 
 void Renderer::Render(TimePoint frame_time) {
-  glViewport(0, 0, size_.width(), size_.height());
+  glViewport(0, 0, stage_.size().width(), stage_.size().height());
   glClear(GL_COLOR_BUFFER_BIT);
 
-  Matrix4 matrix =
-      Matrix4::perspective(60.0f, size_.aspect_ratio(), 1.0f, 20.0f) *
-      Matrix4::translate(Vector3(0.0f, 0.0f, -2.0f));
+  Matrix4 matrix = stage_.viewing_volume().GetProjectionMatrix();
 
   glUniformMatrix4fv(solid_color_shader_.matrix(), 1, GL_FALSE, matrix.data);
   glUniform4f(solid_color_shader_.color(), 1.0f, 1.0f, 0.0f, 1.0f);

@@ -11,7 +11,7 @@
     ],
     'includes': [ '../build/common_defines.gypi', ],
     'include_dirs': ['..'],
-    'sources': [ 
+    'sources': [
       'base/arraysize.h',
       'base/macros.h',
       'base/time.cc',
@@ -22,6 +22,10 @@
       'geometry/size_i.h',
       'gl/extensions.cc',
       'gl/extensions.h',
+      'scene/stage.cc',
+      'scene/stage.h',
+      'scene/viewing_volume.cc',
+      'scene/viewing_volume.h',
       'shaders/solid_color_shader.cc',
       'shaders/solid_color_shader.h',
       'renderer.cc',
