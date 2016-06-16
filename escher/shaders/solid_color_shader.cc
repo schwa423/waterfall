@@ -48,7 +48,7 @@ bool SolidColorShader::Compile() {
   matrix_ = 0;
   color_ = 1;
   glBindUniformLocation(program_, matrix_, "u_matrix");
-  glBindUniformLocation(program_, color_, "u_matrix");
+  glBindUniformLocation(program_, color_, "u_color");
 
   position_ = 0;
   return true;
