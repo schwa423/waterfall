@@ -4,13 +4,15 @@
 
 #include "escher/scene/viewing_volume.h"
 
+#include <utility>
+
 namespace escher {
 
 ViewingVolume::ViewingVolume() {
 }
 
 ViewingVolume::ViewingVolume(SizeI size, float near, float far)
-  : size_(size), near_(near), far_(far) {
+  : size_(std::move(size)), near_(near), far_(far) {
 }
 
 ViewingVolume::~ViewingVolume() {

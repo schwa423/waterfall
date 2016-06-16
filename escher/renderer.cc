@@ -9,6 +9,7 @@
 
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
+#include <math.h>
 #include <utility>
 
 namespace escher {
@@ -18,6 +19,11 @@ namespace {
 // slightly to avoid clipping at the edges of the viewing volume.
 constexpr float kNear = 25.0f;
 constexpr float kFar = -1.0f;
+
+// Key light parameters.
+constexpr float kKeyLightFOV = M_PI/8.0;
+constexpr float kKeyLightRadius = 600.0f;
+constexpr float kKeyLightElevation = 600.0f;
 
 }  // namespace
 
@@ -45,6 +51,15 @@ void Renderer::SetSize(SizeI size) {
                                        size.height() / 2.0f),
                                0.0);
   stage_.set_viewing_volume(ViewingVolume(std::move(size), kNear, kFar));
+  stage_.set_key_light(DirectionalLight(
+      Vector3(size.width() / 2.0f, size.height(), kKeyLightElevation),
+      Vector3(size.width() / 2.0f, size.height() - kKeyLightElevation, 0.0f),
+      kKeyLightRadius,
+      kKeyLightFOV));
+  stage_.set_fill_light(DomeLight(
+      Vector3(size.width() / 2.0f, size.height() / 2.0f, 0.0f),
+      Vector3(0.0f, 0.0f, 1.0f),
+      2.0f * std::max(size.width(), size.height())));
 }
 
 void Renderer::Render(TimePoint frame_time) {
