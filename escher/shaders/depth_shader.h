@@ -11,28 +11,23 @@
 
 namespace escher {
 
-class SolidColorShader {
+class DepthShader {
  public:
-  SolidColorShader();
-  ~SolidColorShader();
+  DepthShader();
+  ~DepthShader();
 
   bool Compile();
 
   GLuint program() const { return program_; }
-
   GLint matrix() const { return matrix_; }
-  GLint color() const { return color_; }
-
   GLint position() const { return position_; }
 
  private:
   GLuint program_ = 0;
-
   GLint matrix_ = 0;
-  GLint color_ = 0;
   GLint position_ = 0;
 
-  ESCHER_DISALLOW_COPY_AND_ASSIGN(SolidColorShader);
+  ESCHER_DISALLOW_COPY_AND_ASSIGN(DepthShader);
 };
 
 }  // namespace escher

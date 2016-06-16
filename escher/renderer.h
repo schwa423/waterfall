@@ -8,7 +8,9 @@
 #include "escher/base/time.h"
 #include "escher/geometry/quad.h"
 #include "escher/geometry/size_i.h"
+#include "escher/gl/depth_buffer.h"
 #include "escher/scene/stage.h"
+#include "escher/shaders/depth_shader.h"
 #include "escher/shaders/solid_color_shader.h"
 
 namespace escher {
@@ -24,9 +26,12 @@ class Renderer {
   void Render(TimePoint frame_time);
 
  private:
+  void DrawScene(const Matrix4& matrix);
   void DrawSolidColorQuad(const Quad& quad, const Vector4& color);
 
   Stage stage_;
+  DepthBuffer shadow_map_;
+  DepthShader depth_shader_;
   SolidColorShader solid_color_shader_;
   Quad app_bar_;
   Quad canvas_;
