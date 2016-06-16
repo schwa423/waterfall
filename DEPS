@@ -21,6 +21,9 @@ deps = {
   "third_party/deqp/src":
       "https://android.googlesource.com/platform/external/deqp@cc0ded6c77267bbb14d21aac358fc5d9690c07f8",
 
+  "third_party/glm":
+      "https://github.com/g-truc/glm.git@0e1e181484495d67b29bddc48f2dae8aa6a67582",
+
   "third_party/libpng":
       "https://android.googlesource.com/platform/external/libpng@094e181e79a3d6c23fd005679025058b7df1ad6c",
 
