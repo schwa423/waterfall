@@ -12,6 +12,7 @@
             [
                 '../src/angle.gyp:*',
                 '../src/tests/tests.gyp:*',
+                '../waterfall/waterfall.gyp:waterfall',
             ],
             'conditions':
             [
