@@ -19,10 +19,12 @@ ViewingVolume::~ViewingVolume() {
 }
 
 Matrix4 ViewingVolume::GetProjectionMatrix() const {
-  // TODO(abarth): Consider flipping top and bottom. We currently use math-style
-  // with y increasing from bottom to top as opposed to UI-style with y
-  // increasing from top to bottom.
-  return Matrix4::ortho(0.0f, size_.width(), 0.0f, size_.height(), near_, far_);
+  return Matrix4::ortho(0.0f,
+                        size_.width(),
+                        size_.height(),
+                        0.0f,
+                        -near_,
+                        -far_);
 }
 
 }  // namespace escher

@@ -25,7 +25,8 @@ class SizeI {
     return float(width_) / height_;
   }
 
-  bool Equals(const SizeI& size);
+  Vector2 AsVector2() const;
+  bool Equals(const SizeI& size) const;
 
  private:
   int width_ = 0;

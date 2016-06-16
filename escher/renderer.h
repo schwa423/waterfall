@@ -24,9 +24,13 @@ class Renderer {
   void Render(TimePoint frame_time);
 
  private:
+  void DrawSolidColorQuad(const Quad& quad, const Vector4& color);
+
   Stage stage_;
   SolidColorShader solid_color_shader_;
-  Quad quad_;
+  Quad app_bar_;
+  Quad canvas_;
+  Quad fab_;
 
   ESCHER_DISALLOW_COPY_AND_ASSIGN(Renderer);
 };

@@ -11,7 +11,11 @@ SizeI::SizeI() {}
 SizeI::SizeI(int width, int height) : width_(width), height_(height) {
 }
 
-bool SizeI::Equals(const SizeI& size) {
+Vector2 SizeI::AsVector2() const {
+  return Vector2(width_, height_);
+}
+
+bool SizeI::Equals(const SizeI& size) const {
   return width_ == size.width_ && height_ == size.height_;
 }
 
