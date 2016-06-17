@@ -4,10 +4,9 @@
 
 #pragma once
 
-#include "util/Vector.h"
-
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
+#include <glm/glm.hpp>
 #include <vector>
 
 namespace escher {
@@ -15,9 +14,9 @@ namespace escher {
 class Quad {
  public:
   Quad();
-  Quad(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3);
+  Quad(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
 
-  static Quad CreateFromRect(Vector2 position, Vector2 size, float z);
+  static Quad CreateFromRect(glm::vec2 position, glm::vec2 size, float z);
 
   const float* data() const {
     return reinterpret_cast<const float*>(this);
@@ -27,7 +26,7 @@ class Quad {
   static GLsizei GetIndexCount();
 
  private:
-  Vector3 p[4] = {};
+  glm::vec3 p[4] = {};
 };
 
 }  // namespace escher

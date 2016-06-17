@@ -5,21 +5,22 @@
 #pragma once
 
 #include "escher/scene/viewing_volume.h"
-#include "util/Vector.h"
+
+#include <glm/glm.hpp>
 
 namespace escher {
 
 class DirectionalLight {
  public:
   DirectionalLight();
-  DirectionalLight(Vector3 source, Vector3 target, float radius, float fov);
+  DirectionalLight(glm::vec3 source, glm::vec3 target, float radius, float fov);
   ~DirectionalLight();
 
   // The center of the area that emits the light.
-  const Vector3& source() const { return source_; }
+  const glm::vec3& source() const { return source_; }
 
   // A location intersected by a light ray emitted from the center of the light.
-  const Vector3& target() const { return target_; }
+  const glm::vec3& target() const { return target_; }
 
   // The radius of the area that emits the light.
   float radius() const { return radius_; }
@@ -27,11 +28,11 @@ class DirectionalLight {
   // The angular dispersion of the emitted light in radians.
   float fov() const { return fov_; }
 
-  Matrix4 GetProjectionMatrix(const ViewingVolume& viewing_volume) const;
+  glm::mat4 GetProjectionMatrix(const ViewingVolume& viewing_volume) const;
 
  private:
-  Vector3 source_;
-  Vector3 target_;
+  glm::vec3 source_;
+  glm::vec3 target_;
   float radius_ = 0.0f;
   float fov_ = 0.0f;
 };

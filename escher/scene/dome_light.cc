@@ -11,7 +11,7 @@ namespace escher {
 DomeLight::DomeLight() {
 }
 
-DomeLight::DomeLight(Vector3 center, Vector3 normal, float radius)
+DomeLight::DomeLight(glm::vec3 center, glm::vec3 normal, float radius)
   : center_(std::move(center)),
     normal_(std::move(normal)),
     radius_(radius) {

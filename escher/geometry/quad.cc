@@ -18,18 +18,18 @@ constexpr GLushort g_indices[] = {
 
 Quad::Quad() {}
 
-Quad::Quad(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3) {
+Quad::Quad(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3) {
   p[0] = p0;
   p[1] = p1;
   p[2] = p2;
   p[3] = p3;
 }
 
-Quad Quad::CreateFromRect(Vector2 position, Vector2 size, float z) {
-  return Quad(Vector3(position.x,          position.y,          z),
-              Vector3(position.x + size.x, position.y,          z),
-              Vector3(position.x + size.x, position.y + size.y, z),
-              Vector3(position.x,          position.y + size.y, z));
+Quad Quad::CreateFromRect(glm::vec2 position, glm::vec2 size, float z) {
+  return Quad(glm::vec3(position.x,          position.y,          z),
+              glm::vec3(position.x + size.x, position.y,          z),
+              glm::vec3(position.x + size.x, position.y + size.y, z),
+              glm::vec3(position.x,          position.y + size.y, z));
 }
 
 const GLushort* Quad::GetIndices() {

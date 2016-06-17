@@ -11,8 +11,8 @@ namespace escher {
 DirectionalLight::DirectionalLight() {
 }
 
-DirectionalLight::DirectionalLight(Vector3 source,
-                                   Vector3 target,
+DirectionalLight::DirectionalLight(glm::vec3 source,
+                                   glm::vec3 target,
                                    float radius,
                                    float fov)
   : source_(std::move(source)),
@@ -24,10 +24,10 @@ DirectionalLight::DirectionalLight(Vector3 source,
 DirectionalLight::~DirectionalLight() {
 }
 
-Matrix4 DirectionalLight::GetProjectionMatrix(
+glm::mat4 DirectionalLight::GetProjectionMatrix(
     const ViewingVolume& viewing_volume) const {
   // TODO(abarth): Actually compute the project matrix for the light.
-  return Matrix4();
+  return glm::mat4();
 }
 
 }  // namespace escher

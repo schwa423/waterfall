@@ -4,6 +4,7 @@
 
 #include "escher/scene/viewing_volume.h"
 
+#include <glm/gtc/matrix_transform.hpp>
 #include <utility>
 
 namespace escher {
@@ -18,13 +19,13 @@ ViewingVolume::ViewingVolume(SizeI size, float near, float far)
 ViewingVolume::~ViewingVolume() {
 }
 
-Matrix4 ViewingVolume::GetProjectionMatrix() const {
-  return Matrix4::ortho(0.0f,
-                        size_.width(),
-                        size_.height(),
-                        0.0f,
-                        -near_,
-                        -far_);
+glm::mat4 ViewingVolume::GetProjectionMatrix() const {
+  return glm::ortho<float>(0.0f,
+                           size_.width(),
+                           size_.height(),
+                           0.0f,
+                           -near_,
+                           -far_);
 }
 
 }  // namespace escher

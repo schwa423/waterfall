@@ -5,7 +5,8 @@
 #pragma once
 
 #include "escher/geometry/size_i.h"
-#include "util/Matrix.h"
+
+#include <glm/glm.hpp>
 
 namespace escher {
 
@@ -17,7 +18,7 @@ class ViewingVolume {
 
   const SizeI& size() const { return size_; }
 
-  Matrix4 GetProjectionMatrix() const;
+  glm::mat4 GetProjectionMatrix() const;
 
  private:
   SizeI size_;

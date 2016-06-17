@@ -11,8 +11,14 @@
       '<(DEPTH)/escher/escher.gyp:escher',
     ],
     'includes': [ '../build/common_defines.gypi', ],
-    'include_dirs': ['..'],
-    'sources': [ 
+    'defines': [
+      'GLM_FORCE_PURE=1',
+    ],
+    'include_dirs': [
+      '..',
+      '../third_party/glm',
+    ],
+    'sources': [
       'waterfall.cc',
     ],
   }],

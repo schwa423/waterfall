@@ -5,28 +5,29 @@
 #pragma once
 
 #include "escher/scene/viewing_volume.h"
-#include "util/Vector.h"
+
+#include <glm/glm.hpp>
 
 namespace escher {
 
 class DomeLight {
  public:
   DomeLight();
-  DomeLight(Vector3 center, Vector3 normal, float radius);
+  DomeLight(glm::vec3 center, glm::vec3 normal, float radius);
   ~DomeLight();
 
   // The center of the half-sphere emitting light.
-  const Vector3& center() const { return center_; }
+  const glm::vec3& center() const { return center_; }
 
   // The direction from the center of the dome to the top of the half-sphere.
-  const Vector3& normal() const { return normal_; }
+  const glm::vec3& normal() const { return normal_; }
 
   // The radius of the half sphere.
   float radius() const { return radius_; }
 
  private:
-  Vector3 center_;
-  Vector3 normal_;
+  glm::vec3 center_;
+  glm::vec3 normal_;
   float radius_ = 0.0f;
 };
 

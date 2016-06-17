@@ -5,10 +5,10 @@
 #pragma once
 
 #include "escher/base/macros.h"
-#include "util/Vector.h"
 
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
+#include <glm/glm.hpp>
 #include <vector>
 
 namespace escher {
@@ -25,7 +25,7 @@ class SizeI {
     return float(width_) / height_;
   }
 
-  Vector2 AsVector2() const;
+  glm::vec2 AsVec2() const;
   bool Equals(const SizeI& size) const;
 
  private:

@@ -11,8 +11,8 @@ SizeI::SizeI() {}
 SizeI::SizeI(int width, int height) : width_(width), height_(height) {
 }
 
-Vector2 SizeI::AsVector2() const {
-  return Vector2(width_, height_);
+glm::vec2 SizeI::AsVec2() const {
+  return glm::vec2(width_, height_);
 }
 
 bool SizeI::Equals(const SizeI& size) const {

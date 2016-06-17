@@ -10,7 +10,13 @@
       '<(DEPTH)/samples/samples.gyp:sample_util'
     ],
     'includes': [ '../build/common_defines.gypi', ],
-    'include_dirs': ['..'],
+    'defines': [
+      'GLM_FORCE_PURE=1',
+    ],
+    'include_dirs': [
+      '..',
+      '../third_party/glm',
+    ],
     'sources': [
       'base/arraysize.h',
       'base/macros.h',

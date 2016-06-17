@@ -13,6 +13,8 @@
 #include "escher/shaders/depth_shader.h"
 #include "escher/shaders/solid_color_shader.h"
 
+#include <glm/glm.hpp>
+
 namespace escher {
 
 class Renderer {
@@ -26,8 +28,8 @@ class Renderer {
   void Render(TimePoint frame_time);
 
  private:
-  void DrawScene(const Matrix4& matrix);
-  void DrawSolidColorQuad(const Quad& quad, const Vector4& color);
+  void DrawScene(const glm::mat4& matrix);
+  void DrawSolidColorQuad(const Quad& quad, const glm::vec4& color);
 
   Stage stage_;
   DepthBuffer shadow_map_;
