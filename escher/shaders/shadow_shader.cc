@@ -26,18 +26,36 @@ constexpr char g_vertex_shader[] = SHADER_SOURCE(
 constexpr char g_fragment_shader[] = SHADER_SOURCE(
   precision mediump float;
   uniform vec4 u_color;
-  uniform sampler2D u_shadow_map;
+  uniform highp sampler2D u_shadow_map;
   varying vec4 v_light_position;
 
+  const float spread = 0.001;
   const float bias = 0.005;
+  const float increment = 0.5 / 25.0;
 
   void main() {
     // Change coordinate systems from [-1, 1] to [0, 1].
-    vec3 light_uv = v_light_position.xyz * 0.5 + 0.5;
-    float occulder_depth = texture2D(u_shadow_map, light_uv.xy).r;
+    vec3 light_uv = v_light_position.xyz / v_light_position.w * 0.5 + 0.5;
     float fragment_depth = light_uv.z - bias;
-    float shadow = fragment_depth > occulder_depth ? 0.5 : 1.0;
-    gl_FragColor = vec4(shadow * u_color.rgb, u_color.a);
+
+    float illumination = 1.0;
+    for (int y = -2 ; y <= 2 ; y++) {
+      for (int x = -2 ; x <= 2 ; x++) {
+        vec2 sample_uv = light_uv.xy + vec2(x, y) * spread;
+        float occulder_depth = texture2D(u_shadow_map, sample_uv).r;
+        if (fragment_depth > occulder_depth)
+          illumination -= increment;
+      }
+    }
+    //
+    //
+    // float occulder_depth = texture2D(u_shadow_map, light_uv.xy).r;
+    // float fragment_depth = light_uv.z - bias;
+    // // float shadow = 1.0;
+    // float shadow = fragment_depth > occulder_depth ? 0.5 : 1.0;
+    gl_FragColor = vec4(illumination * u_color.rgb, u_color.a);
+    // gl_FragColor = vec4(light_uv.xy, 0.0, u_color.a);
+    // gl_FragColor = vec4(occulder_depth, 0.0, 0.0, u_color.a);
   }
 );
 

@@ -37,6 +37,7 @@ class Renderer {
   DepthShader depth_shader_;
   SolidColorShader solid_color_shader_;
   ShadowShader shadow_shader_;
+  Quad drawer_;
   Quad app_bar_;
   Quad canvas_;
   Quad fab_;

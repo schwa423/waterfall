@@ -58,6 +58,9 @@ void Renderer::SetSize(SizeI size) {
     exit(1);
   }
 
+  drawer_ = Quad::CreateFromRect(glm::vec2(0.0f, 0.0f),
+                                 glm::vec2(size.width() * 0.1f, size.height()),
+                                 16.0f);
   app_bar_ = Quad::CreateFromRect(glm::vec2(0.0f, 0.0f),
                                   glm::vec2(size.width(), 56.0f),
                                   4.0f);
@@ -90,31 +93,40 @@ void Renderer::DrawQuad(GLint position, const Quad& quad) {
 }
 
 void Renderer::Render(TimePoint frame_time) {
+  glm::mat4 model_matrix(
+    1.0f,  0.0f,  0.0f,  0.0f,
+    0.0f, -1.0f,  0.0f,  0.0f,
+    0.0f,  0.0f,  1.0f,  0.0f,
+    0.0f,  0.0f,  0.0f,  1.0f
+  );
+
   glBindFramebuffer(GL_FRAMEBUFFER, shadow_map_.frame_buffer().id());
   glViewport(0, 0, shadow_map_.size().width(), shadow_map_.size().height());
   glClear(GL_DEPTH_BUFFER_BIT);
   glUseProgram(depth_shader_.program().id());
-  glm::mat4 light_matrix = stage_.key_light().GetProjectionMatrix(
+  glm::mat4 light_matrix = model_matrix * stage_.key_light().GetProjectionMatrix(
       stage_.viewing_volume());
   glUniformMatrix4fv(depth_shader_.matrix(), 1, GL_FALSE, &light_matrix[0][0]);
   glEnableVertexAttribArray(depth_shader_.position());
-  DrawQuad(depth_shader_.position(), canvas_);
+  // DrawQuad(depth_shader_.position(), drawer_);
   DrawQuad(depth_shader_.position(), app_bar_);
+  DrawQuad(depth_shader_.position(), canvas_);
   DrawQuad(depth_shader_.position(), fab_);
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glViewport(0, 0, stage_.size().width(), stage_.size().height());
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glUseProgram(shadow_shader_.program().id());
-  glm::mat4 matrix = stage_.viewing_volume().GetProjectionMatrix();
+  glm::mat4 matrix = model_matrix * stage_.viewing_volume().GetProjectionMatrix();
   glEnableVertexAttribArray(shadow_shader_.position());
   glUniformMatrix4fv(shadow_shader_.matrix(), 1, GL_FALSE, &matrix[0][0]);
   glUniformMatrix4fv(shadow_shader_.light_matrix(), 1, GL_FALSE, &light_matrix[0][0]);
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, shadow_map_.texture().id());
   glUniform1i(shadow_shader_.shadow_map(), 0);
-  DrawSolidColorQuad(canvas_, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+  // DrawSolidColorQuad(drawer_, glm::vec4(0.9f, 0.9f, 0.9f, 1.0f));
   DrawSolidColorQuad(app_bar_, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+  DrawSolidColorQuad(canvas_, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
   DrawSolidColorQuad(fab_, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 }
 
