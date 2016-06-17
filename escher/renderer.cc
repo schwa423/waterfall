@@ -68,8 +68,6 @@ void Renderer::SetSize(SizeI size) {
 }
 
 void Renderer::Render(const Model& model) {
-  glm::mat4 matrix = stage_.viewing_volume().GetProjectionMatrix();
-
   glBindFramebuffer(GL_FRAMEBUFFER, shadow_map_.frame_buffer().id());
   glViewport(0, 0, shadow_map_.size().width(), shadow_map_.size().height());
   glClear(GL_DEPTH_BUFFER_BIT);
@@ -80,8 +78,8 @@ void Renderer::Render(const Model& model) {
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glViewport(0, 0, stage_.size().width(), stage_.size().height());
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glm::mat4 projection_matrix = stage_.viewing_volume().GetProjectionMatrix();
-  DrawModelWithShadowShader(model, projection_matrix, light_matrix);
+  glm::mat4 matrix = stage_.viewing_volume().GetProjectionMatrix();
+  DrawModelWithShadowShader(model, matrix, light_matrix);
 }
 
 void Renderer::DrawModelWithDepthShader(const Model& model,
@@ -99,12 +97,11 @@ void Renderer::DrawModelWithDepthShader(const Model& model,
 }
 
 void Renderer::DrawModelWithShadowShader(const Model& model,
-                                         const glm::mat4& projection_matrix,
+                                         const glm::mat4& matrix,
                                          const glm::mat4& light_matrix) {
   glUseProgram(shadow_shader_.program().id());
   glEnableVertexAttribArray(shadow_shader_.position());
-  glUniformMatrix4fv(shadow_shader_.matrix(), 1, GL_FALSE,
-                     &projection_matrix[0][0]);
+  glUniformMatrix4fv(shadow_shader_.matrix(), 1, GL_FALSE, &matrix[0][0]);
   glUniformMatrix4fv(shadow_shader_.light_matrix(), 1, GL_FALSE,
                      &light_matrix[0][0]);
   glActiveTexture(GL_TEXTURE0);

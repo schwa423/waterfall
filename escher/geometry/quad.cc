@@ -10,8 +10,7 @@ namespace escher {
 namespace {
 
 constexpr GLushort g_indices[] = {
-  0, 1, 2,
-  0, 2, 3,
+    0, 1, 2, 0, 2, 3,
 };
 
 }  // namespace
@@ -26,10 +25,10 @@ Quad::Quad(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3) {
 }
 
 Quad Quad::CreateFromRect(glm::vec2 position, glm::vec2 size, float z) {
-  return Quad(glm::vec3(position.x,          position.y,          z),
-              glm::vec3(position.x + size.x, position.y,          z),
+  return Quad(glm::vec3(position.x, position.y + size.y, z),
               glm::vec3(position.x + size.x, position.y + size.y, z),
-              glm::vec3(position.x,          position.y + size.y, z));
+              glm::vec3(position.x + size.x, position.y, z),
+              glm::vec3(position.x, position.y, z));
 }
 
 const GLushort* Quad::GetIndices() {

@@ -20,11 +20,7 @@ ViewingVolume::~ViewingVolume() {
 }
 
 glm::mat4 ViewingVolume::GetProjectionMatrix() const {
-  return glm::ortho<float>(0.0f,
-                           size_.width(),
-                           0.0f,
-                           size_.height(),
-                           -near_,
+  return glm::ortho<float>(0.0f, size_.width(), size_.height(), 0.0f, -near_,
                            -far_);
 }
 
