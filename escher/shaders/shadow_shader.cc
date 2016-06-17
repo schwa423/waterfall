@@ -29,7 +29,7 @@ constexpr char g_fragment_shader[] = SHADER_SOURCE(
   uniform highp sampler2D u_shadow_map;
   varying vec4 v_light_position;
 
-  const float spread = 0.001;
+  const float spread = 0.002;
   const float bias = 0.005;
   const float increment = 0.5 / 25.0;
 
