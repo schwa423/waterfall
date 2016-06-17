@@ -1,35 +1,8 @@
-# Defines the ANGLE style for automatic reformatting.
-# https://code.google.com/p/angleproject/wiki/CodingStandard
-# See Clang docs: http://clang.llvm.org/docs/ClangFormatStyleOptions.html
+# Defines the Chromium style for automatic reformatting.
+# http://clang.llvm.org/docs/ClangFormatStyleOptions.html
 BasedOnStyle: Chromium
-
-# Allow double brackets such as std::vector<std::vector<int>>.
+# This defaults to 'Auto'. Explicitly set it for a while, so that
+# 'vector<vector<int> >' in existing files gets formatted to
+# 'vector<vector<int>>'. ('Auto' means that clang-format will only use
+# 'int>>' if the file already contains at least one such instance.)
 Standard: Cpp11
-
-# Indent 4 spaces at a time.
-IndentWidth: 4
-
-# Keep lines under 100 columns long.
-ColumnLimit: 100
-
-# Always break before braces
-BreakBeforeBraces: Allman
-
-# Indent case labels.
-IndentCaseLabels: true
-
-# Right-align pointers and references
-PointerAlignment: Right
-
-# ANGLE likes to align things as much as possible.
-AlignOperands: true
-AlignConsecutiveAssignments: true
-
-# Use 2 space negative offset for access modifiers
-AccessModifierOffset: -2
-
-# TODO(jmadill): Decide if we want this on. Doesn't have an "all or none" mode.
-AllowShortCaseLabelsOnASingleLine: false
-
-# Useful for spacing out functions in classes
-KeepEmptyLinesAtTheStartOfBlocks: true
