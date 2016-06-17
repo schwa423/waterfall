@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <assert.h>
+
 #define ESCHER_DISALLOW_COPY(TypeName)                                         \
   TypeName(const TypeName&) = delete
 
@@ -17,3 +19,5 @@
 #define ESCHER_DISALLOW_IMPLICIT_CONSTRUCTORS(TypeName)                        \
   TypeName() = delete;                                                         \
   DISALLOW_COPY_AND_ASSIGN(TypeName)
+
+#define ESCHER_DCHECK(expr) assert(expr)
