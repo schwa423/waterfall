@@ -17,6 +17,7 @@ DepthBuffer::~DepthBuffer() {
 bool DepthBuffer::SetSize(const SizeI& size) {
   if (size_.Equals(size))
     return !!texture_;
+  size_ = size;
 
   if (!frame_buffer_)
     frame_buffer_ = MakeUniqueFrameBuffer();
@@ -28,8 +29,9 @@ bool DepthBuffer::SetSize(const SizeI& size) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, size.width(),
-               size.height(), 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, nullptr);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
+               size_.width(), size_.height(), 0, GL_DEPTH_COMPONENT,
+               GL_UNSIGNED_SHORT, nullptr);
 
   glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer_.id());
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,

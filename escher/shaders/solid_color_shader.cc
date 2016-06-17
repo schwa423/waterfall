@@ -4,7 +4,7 @@
 
 #include "escher/shaders/solid_color_shader.h"
 
-#include "escher/gl/extensions.h"
+#include "escher/shaders/uniforms.h"
 #include "util/shader_utils.h"
 
 namespace escher {
@@ -41,10 +41,13 @@ bool SolidColorShader::Compile() {
   if (!program_)
     return false;
 
-  matrix_ = 0;
-  color_ = 1;
-  glBindUniformLocation(program_.id(), matrix_, "u_matrix");
-  glBindUniformLocation(program_.id(), color_, "u_color");
+  BindUniforms(program_.id(), {
+    &matrix_,
+    &color_,
+  }, {
+    "u_matrix",
+    "u_color",
+  });
 
   position_ = 0;
   return true;

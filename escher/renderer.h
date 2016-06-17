@@ -13,6 +13,7 @@
 #include "escher/gl/depth_buffer.h"
 #include "escher/scene/stage.h"
 #include "escher/shaders/depth_shader.h"
+#include "escher/shaders/shadow_shader.h"
 #include "escher/shaders/solid_color_shader.h"
 
 namespace escher {
@@ -35,6 +36,7 @@ class Renderer {
   DepthBuffer shadow_map_;
   DepthShader depth_shader_;
   SolidColorShader solid_color_shader_;
+  ShadowShader shadow_shader_;
   Quad app_bar_;
   Quad canvas_;
   Quad fab_;

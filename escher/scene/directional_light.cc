@@ -25,8 +25,19 @@ DirectionalLight::~DirectionalLight() {
 
 glm::mat4 DirectionalLight::GetProjectionMatrix(
     const ViewingVolume& viewing_volume) const {
-  return viewing_volume.GetProjectionMatrix() * glm::lookAt(
-      source_, target_, glm::vec3(0.0f, 1.0f, 0.0));
+  // TODO(abarth): Figure out how to compute these values analytically.
+  float width = viewing_volume.size().width();
+  float height = viewing_volume.size().height();
+  float half_width = width * 0.5f;
+  return glm::ortho<float>(
+    -width * 0.6 , width * 0.6,
+    0.0f, height,
+    200.0f, 1000.0f
+  ) * glm::lookAt<float>(
+    glm::vec3(half_width, 600.0f, 700.0f),
+    glm::vec3(half_width, 0.0f, 100.0f),
+    glm::vec3(0.0f, 1.0f, 0.0f)
+  );
 }
 
 }  // namespace escher
