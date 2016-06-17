@@ -19,8 +19,9 @@ bool DepthBuffer::SetSize(const SizeI& size) {
     return !!texture_;
 
   if (!frame_buffer_)
-    frame_buffer_.Generate();
-  texture_.Generate();
+    frame_buffer_ = MakeUniqueFrameBuffer();
+
+  texture_ = MakeUniqueTexture();
 
   glBindTexture(GL_TEXTURE_2D, texture_.id());
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);

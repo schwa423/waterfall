@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "escher/scene/viewing_volume.h"
-
 #include <glm/glm.hpp>
+
+#include "escher/scene/viewing_volume.h"
 
 namespace escher {
 

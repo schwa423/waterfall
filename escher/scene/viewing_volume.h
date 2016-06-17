@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "escher/geometry/size_i.h"
-
 #include <glm/glm.hpp>
+
+#include "escher/geometry/size_i.h"
 
 namespace escher {
 

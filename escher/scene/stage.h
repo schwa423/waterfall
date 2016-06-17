@@ -4,12 +4,12 @@
 
 #pragma once
 
+#include <utility>
+
 #include "escher/base/macros.h"
 #include "escher/scene/directional_light.h"
 #include "escher/scene/dome_light.h"
 #include "escher/scene/viewing_volume.h"
-
-#include <utility>
 
 namespace escher {
 

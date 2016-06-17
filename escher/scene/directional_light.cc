@@ -4,6 +4,7 @@
 
 #include "escher/scene/directional_light.h"
 
+#include <glm/gtc/matrix_transform.hpp>
 #include <utility>
 
 namespace escher {
@@ -13,12 +14,10 @@ DirectionalLight::DirectionalLight() {
 
 DirectionalLight::DirectionalLight(glm::vec3 source,
                                    glm::vec3 target,
-                                   float radius,
-                                   float fov)
+                                   float radius)
   : source_(std::move(source)),
     target_(std::move(target)),
-    radius_(radius),
-    fov_(fov) {
+    radius_(radius) {
 }
 
 DirectionalLight::~DirectionalLight() {
@@ -26,8 +25,8 @@ DirectionalLight::~DirectionalLight() {
 
 glm::mat4 DirectionalLight::GetProjectionMatrix(
     const ViewingVolume& viewing_volume) const {
-  // TODO(abarth): Actually compute the project matrix for the light.
-  return glm::mat4();
+  return viewing_volume.GetProjectionMatrix() * glm::lookAt(
+      source_, target_, glm::vec3(0.0f, 1.0f, 0.0));
 }
 
 }  // namespace escher

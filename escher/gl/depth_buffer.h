@@ -9,9 +9,6 @@
 #include "escher/gl/unique_frame_buffer.h"
 #include "escher/gl/unique_texture.h"
 
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
-
 namespace escher {
 
 class DepthBuffer {

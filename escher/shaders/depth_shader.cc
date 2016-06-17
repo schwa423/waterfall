@@ -11,16 +11,15 @@ namespace escher {
 namespace {
 
 constexpr char g_vertex_shader[] = SHADER_SOURCE(
-  attribute vec4 a_position;
+  attribute vec3 a_position;
   uniform mat4 u_matrix;
 
   void main() {
-    gl_Position = u_matrix * a_position;
+    gl_Position = u_matrix * vec4(a_position, 1.0);
   }
 );
 
 constexpr char g_fragment_shader[] = SHADER_SOURCE(
-  precision mediump float;
   void main() { }
 );
 
@@ -30,19 +29,15 @@ DepthShader::DepthShader() {
 }
 
 DepthShader::~DepthShader() {
-  if (program_) {
-    glDeleteProgram(program_);
-    program_ = 0;
-  }
 }
 
 bool DepthShader::Compile() {
-  program_ = CompileProgram(g_vertex_shader, g_fragment_shader);
+  program_ = MakeUniqueProgram(g_vertex_shader, g_fragment_shader);
   if (!program_)
     return false;
 
   matrix_ = 0;
-  glBindUniformLocation(program_, matrix_, "u_matrix");
+  glBindUniformLocation(program_.id(), matrix_, "u_matrix");
 
   position_ = 0;
   return true;

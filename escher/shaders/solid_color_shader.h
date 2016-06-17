@@ -5,9 +5,7 @@
 #pragma once
 
 #include "escher/base/macros.h"
-
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
+#include "escher/gl/unique_program.h"
 
 namespace escher {
 
@@ -18,7 +16,7 @@ class SolidColorShader {
 
   bool Compile();
 
-  GLuint program() const { return program_; }
+  const UniqueProgram& program() const { return program_; }
 
   GLint matrix() const { return matrix_; }
   GLint color() const { return color_; }
@@ -26,7 +24,7 @@ class SolidColorShader {
   GLint position() const { return position_; }
 
  private:
-  GLuint program_ = 0;
+  UniqueProgram program_;
 
   GLint matrix_ = 0;
   GLint color_ = 0;

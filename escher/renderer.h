@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <glm/glm.hpp>
+
 #include "escher/base/macros.h"
 #include "escher/base/time.h"
 #include "escher/geometry/quad.h"
@@ -12,8 +14,6 @@
 #include "escher/scene/stage.h"
 #include "escher/shaders/depth_shader.h"
 #include "escher/shaders/solid_color_shader.h"
-
-#include <glm/glm.hpp>
 
 namespace escher {
 
@@ -28,8 +28,8 @@ class Renderer {
   void Render(TimePoint frame_time);
 
  private:
-  void DrawScene(const glm::mat4& matrix);
   void DrawSolidColorQuad(const Quad& quad, const glm::vec4& color);
+  void DrawQuad(GLint position, const Quad& quad);
 
   Stage stage_;
   DepthBuffer shadow_map_;

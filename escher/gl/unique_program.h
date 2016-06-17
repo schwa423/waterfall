@@ -4,18 +4,14 @@
 
 #pragma once
 
+#include <string>
+
 #include "escher/gl/unique_object.h"
 
 namespace escher {
-namespace internal {
 
-inline void DeleteTexture(GLuint id) {
-  glDeleteTextures(1, &id);
-}
-
-}  // internal
-
-typedef UniqueObject<internal::DeleteTexture> UniqueTexture;
-UniqueTexture MakeUniqueTexture();
+typedef UniqueObject<glDeleteProgram> UniqueProgram;
+UniqueProgram MakeUniqueProgram(const std::string& vertex_shader,
+                                const std::string& fragment_shader);
 
 }  // namespace escher

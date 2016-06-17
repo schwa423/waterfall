@@ -4,12 +4,12 @@
 
 #pragma once
 
-#include "escher/base/macros.h"
-
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 #include <glm/glm.hpp>
 #include <vector>
+
+#include "escher/base/macros.h"
 
 namespace escher {
 

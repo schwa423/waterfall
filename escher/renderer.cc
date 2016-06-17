@@ -4,13 +4,13 @@
 
 #include "escher/renderer.h"
 
-#include "escher/gl/extensions.h"
-
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 #include <iostream>
 #include <math.h>
 #include <utility>
+
+#include "escher/gl/extensions.h"
 
 namespace escher {
 namespace {
@@ -21,7 +21,6 @@ constexpr float kNear = 25.0f;
 constexpr float kFar = -1.0f;
 
 // Key light parameters.
-constexpr float kKeyLightFOV = M_PI/8.0;
 constexpr float kKeyLightRadius = 600.0f;
 constexpr float kKeyLightElevation = 600.0f;
 
@@ -69,42 +68,49 @@ void Renderer::SetSize(SizeI size) {
   stage_.set_key_light(DirectionalLight(
       glm::vec3(size.width() / 2.0f, 0.0f, kKeyLightElevation),
       glm::vec3(size.width() / 2.0f, kKeyLightElevation, 0.0f),
-      kKeyLightRadius,
-      kKeyLightFOV));
+      kKeyLightRadius));
   stage_.set_fill_light(DomeLight(
       glm::vec3(size.width() / 2.0f, size.height() / 2.0f, 0.0f),
       glm::vec3(0.0f, 0.0f, 1.0f),
       2.0f * std::max(size.width(), size.height())));
 }
 
-void Renderer::DrawScene(const glm::mat4& matrix) {
-  glUseProgram(solid_color_shader_.program());
-  glEnableVertexAttribArray(solid_color_shader_.position());
-  glUniformMatrix4fv(solid_color_shader_.matrix(), 1, GL_FALSE, &matrix[0][0]);
-  DrawSolidColorQuad(canvas_, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-  DrawSolidColorQuad(app_bar_, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-  DrawSolidColorQuad(fab_, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-}
-
 void Renderer::DrawSolidColorQuad(const Quad& quad, const glm::vec4& color) {
   glUniform4f(solid_color_shader_.color(), color.x, color.y, color.z, color.w);
-  glVertexAttribPointer(solid_color_shader_.position(), 3, GL_FLOAT, GL_FALSE,
-                        0, quad.data());
+  DrawQuad(solid_color_shader_.position(), quad);
+}
+
+void Renderer::DrawQuad(GLint position, const Quad& quad) {
+  glVertexAttribPointer(position, 3, GL_FLOAT, GL_FALSE, 0, quad.data());
   glDrawElements(GL_TRIANGLES, Quad::GetIndexCount(),
                  GL_UNSIGNED_SHORT, Quad::GetIndices());
 }
 
 void Renderer::Render(TimePoint frame_time) {
-  glm::mat4 matrix = stage_.viewing_volume().GetProjectionMatrix();
-
   glBindFramebuffer(GL_FRAMEBUFFER, shadow_map_.frame_buffer().id());
+  glViewport(0, 0, shadow_map_.size().width(), shadow_map_.size().height());
   glClear(GL_DEPTH_BUFFER_BIT);
-  DrawScene(matrix);
+  glUseProgram(depth_shader_.program().id());
+  glm::mat4 light_matrix = stage_.key_light().GetProjectionMatrix(
+      stage_.viewing_volume());
+  glUniformMatrix4fv(depth_shader_.matrix(), 1, GL_FALSE, &light_matrix[0][0]);
+  glEnableVertexAttribArray(depth_shader_.position());
+  DrawQuad(depth_shader_.position(), canvas_);
+  DrawQuad(depth_shader_.position(), app_bar_);
+  DrawQuad(depth_shader_.position(), fab_);
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glViewport(0, 0, stage_.size().width(), stage_.size().height());
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  DrawScene(matrix);
+
+  glUseProgram(solid_color_shader_.program().id());
+  glm::mat4 matrix = stage_.viewing_volume().GetProjectionMatrix();
+  glEnableVertexAttribArray(solid_color_shader_.position());
+  glUniformMatrix4fv(solid_color_shader_.matrix(), 1, GL_FALSE, &matrix[0][0]);
+  DrawSolidColorQuad(canvas_, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+  DrawSolidColorQuad(app_bar_, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+  DrawSolidColorQuad(fab_, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+
 }
 
 }  // namespace escher
