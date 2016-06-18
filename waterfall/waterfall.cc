@@ -15,6 +15,7 @@ class WaterfallApplication : public SampleApplication {
     app_bar_material_.set_color(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
     canvas_material_.set_color(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     fab_material_.set_color(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    green_material_.set_color(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
   }
 
   bool initialize() override { return renderer_.Init(); }
@@ -36,6 +37,16 @@ class WaterfallApplication : public SampleApplication {
         glm::vec2(0.0f, 0.0f), glm::vec2(window_size_.width(), 56.0f), 4.0f,
         &app_bar_material_));
 
+    model.AddObject(escher::Object::CreateRect(glm::vec2(100.0f, 180.0f),
+                                               glm::vec2(60.0f, 40.0f), 12.0f,
+                                               &green_material_));
+    model.AddObject(escher::Object::CreateRect(glm::vec2(200.0f, 180.0f),
+                                               glm::vec2(60.0f, 40.0f), 16.0f,
+                                               &green_material_));
+    model.AddObject(escher::Object::CreateRect(
+        glm::vec2(0.0f, 200.0f), glm::vec2(window_size_.width(), 80.0f), 2.0f,
+        &fab_material_));
+
     // canvas
     model.AddObject(escher::Object::CreateRect(
         glm::vec2(0.0f, 0.0f), window_size_.AsVec2(), 0.0f, &canvas_material_));
@@ -53,6 +64,7 @@ class WaterfallApplication : public SampleApplication {
   escher::Material app_bar_material_;
   escher::Material canvas_material_;
   escher::Material fab_material_;
+  escher::Material green_material_;
 
   escher::TimePoint frame_time_;
   escher::SizeI window_size_;

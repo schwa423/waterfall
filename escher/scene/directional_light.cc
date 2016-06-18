@@ -25,15 +25,22 @@ DirectionalLight::~DirectionalLight() {
 
 glm::mat4 DirectionalLight::GetProjectionMatrix(
     const ViewingVolume& viewing_volume) const {
-  // TODO(abarth): Figure out how to compute these values analytically.
   float width = viewing_volume.size().width();
   float height = viewing_volume.size().height();
-  float half_width = width * 0.5f;
-  return glm::ortho<float>(-width * 0.6, width * 0.6, height, 0.0f, 200.0f,
-                           1000.0f) *
-         glm::lookAt<float>(glm::vec3(half_width, 600.0f, 700.0f),
-                            glm::vec3(half_width, 0.0f, 100.0f),
-                            glm::vec3(0.0f, 1.0f, 0.0f));
+
+  // Assume the light source is coplanar with the XY ground plane and emits
+  // perfectly collimated rays.  To find the shaded portion of the scene,
+  // we project it orthographically into the same viewing volume used for
+  // rendering but apply a skew to the position of each object in proportion
+  // with its elevation.  Rendering this projection can be used to fill
+  // buffers with information about the occluder of each pixel.
+  float delta_x = source_.x - target_.x;
+  float delta_y = source_.y - target_.y;
+  float delta_z = source_.z - target_.z;
+  ESCHER_DCHECK(delta_z > 0.001f);
+  return viewing_volume.GetProjectionMatrix() *
+         glm::mat4(1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, delta_x / -delta_z,
+                   delta_y / -delta_z, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f);
 }
 
 }  // namespace escher

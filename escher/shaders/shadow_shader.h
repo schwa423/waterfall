@@ -19,7 +19,6 @@ class ShadowShader {
   const UniqueProgram& program() const { return program_; }
 
   GLint matrix() const { return matrix_; }
-  GLint light_matrix() const { return light_matrix_; }
   GLint shadow_map() const { return shadow_map_; }
   GLint color() const { return color_; }
 
@@ -29,7 +28,6 @@ class ShadowShader {
   UniqueProgram program_;
 
   GLint matrix_ = 0;
-  GLint light_matrix_ = 0;
   GLint shadow_map_ = 0;
   GLint color_ = 0;
   GLint position_ = 0;

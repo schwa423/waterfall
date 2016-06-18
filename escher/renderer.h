@@ -33,8 +33,7 @@ class Renderer {
   void DrawModelWithDepthShader(const Model& model,
                                 const glm::mat4& light_matrix);
   void DrawModelWithShadowShader(const Model& model,
-                                 const glm::mat4& projection_matrix,
-                                 const glm::mat4& light_matrix);
+                                 const glm::mat4& projection_matrix);
 
   Stage stage_;
   DepthBuffer shadow_map_;
