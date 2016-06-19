@@ -5,6 +5,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <math.h>
 
 #include "escher/geometry/size_i.h"
 
@@ -17,6 +18,7 @@ class ViewingVolume {
   ~ViewingVolume();
 
   const SizeI& size() const { return size_; }
+  float depth() const { return std::abs(near_ - far_); }
 
   glm::mat4 GetProjectionMatrix() const;
 

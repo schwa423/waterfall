@@ -5,28 +5,27 @@
 #include "escher/shaders/solid_color_shader.h"
 
 #include "escher/shaders/uniforms.h"
-#include "util/shader_utils.h"
 
 namespace escher {
 namespace {
 
-constexpr char g_vertex_shader[] = SHADER_SOURCE(
+constexpr char g_vertex_shader[] = R"GLSL(
   attribute vec3 a_position;
   uniform mat4 u_matrix;
 
   void main() {
     gl_Position = u_matrix * vec4(a_position, 1.0);
   }
-);
+)GLSL";
 
-constexpr char g_fragment_shader[] = SHADER_SOURCE(
+constexpr char g_fragment_shader[] = R"GLSL(
   precision mediump float;
   uniform vec4 u_color;
 
   void main() {
     gl_FragColor = u_color;
   }
-);
+)GLSL";
 
 }  // namespace
 
