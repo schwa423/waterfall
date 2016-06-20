@@ -20,7 +20,7 @@ class LightingFilter {
 
   const UniqueProgram& program() const { return program_; }
 
-  GLint occlusions() const { return occlusions_; }
+  GLint illumination_map() const { return illumination_map_; }
   GLint tap_stride() const { return tap_stride_; }
 
   GLint position() const { return position_; }
@@ -28,7 +28,7 @@ class LightingFilter {
  private:
   UniqueProgram program_;
 
-  GLint occlusions_ = 0;
+  GLint illumination_map_ = 0;
   GLint tap_stride_ = 0;
   GLint position_ = 0;
 

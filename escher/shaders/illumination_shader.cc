@@ -25,8 +25,7 @@ constexpr char g_fragment_shader[] = R"GLSL(
 
   void main() {
     vec3 scene = texture2D(u_scene, fragment_uv.xy).rgb;
-    float occlusion = texture2D(u_lighting, fragment_uv.xy).r;
-    float illumination = 1.0 - occlusion;
+    float illumination = texture2D(u_lighting, fragment_uv.xy).r;
     gl_FragColor = vec4(illumination * scene, 1.0);
   }
 )GLSL";

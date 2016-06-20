@@ -128,7 +128,7 @@ void Renderer::ComputeIllumination() {
         lighting_buffer_.SetColorTexture(std::move(scratch_texture_));
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(lighting_filter_.program().id());
-    glUniform1i(lighting_filter_.occlusions(), 0);
+    glUniform1i(lighting_filter_.illumination_map(), 0);
     auto view_size = stage_.viewing_volume().size();
     glUniform2f(lighting_filter_.tap_stride(), 1.0f / view_size.width(), 0.0f);
     glActiveTexture(GL_TEXTURE0);

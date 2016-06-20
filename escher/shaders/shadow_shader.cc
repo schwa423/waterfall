@@ -23,41 +23,69 @@ constexpr char g_fragment_shader[] = R"GLSL(
   uniform sampler2D u_noise;
   varying vec2 fragment_uv;
 
+  const float kPi = 3.14159265359;
+
+  // TODO(abarth): Provide this values as uniform inputs to the shader.
   const vec2 view_size = vec2(360.0, 640.0);
-  const float scene_depth = 26.0;
-  const int kTapCount = 8;
-  const int kSpiralTurnCount = 7;
-  const float kLightRadiusDP = 16.0;
+  const float scene_depth = -26.0;
 
   // Must match header.
   const int kNoiseSize = 5;
 
-  float sampleOcclusion(vec2 fragment_uv,
-                        vec3 fragment_dp,
-                        int index,
-                        float theta0) {
+  // The numer of screen-space samples to use in the computation.
+  const int kTapCount = 8;
+
+  // These should be relatively primary to each other and to kTapCount;
+  const vec2 kSpirals = vec2(7.0, 5.0);
+
+  const float kSampleHemisphereRadius = 32.0;  // screen pixels.
+
+  // Terminology:
+  //
+  //  * theta is the azimuthal angle
+  //  * phi for the polar angle
+
+  // The light's primary direction in polar coordinates, (theta, phi). For
+  // simplicity, we assume that the light is infinitely far away (i.e., the
+  // light is directional from this direction).
+  const vec2 kLight = vec2(kPi / 2.0, kPi / 4.0);
+
+  // Along the light is directional, the light has some amount of angular
+  // dispersion (i.e., the light is not fully columnated). For simplicity, we
+  // assume the dispersion of the light source is symmetric about the light's
+  // primary direction.
+  const float kLightDispersion = kPi / 4.0;
+  const vec2 kLight0 = kLight - kLightDispersion / 2.0;
+
+  float sampleIllumination(vec2 fragment_uv,
+                           float fragment_z,
+                           int index,
+                           vec2 seed) {
     float alpha = (float(index) + 0.5) / float(kTapCount);
-    float theta = alpha * float(kSpiralTurnCount) * 6.28 + theta0;
-    vec2 tap_delta_dp = alpha * kLightRadiusDP * vec2(cos(theta), abs(sin(theta)));
-    vec2 tap_delta_uv = tap_delta_dp / view_size;
+    vec2 polar = kLight0 + fract(seed + alpha * kSpirals) * kLightDispersion;
+    float theta = polar.x;
+    float phi = polar.y;
+    float radius = alpha * kSampleHemisphereRadius;
+
+    vec2 tap_delta_uv = radius * sin(phi) * vec2(cos(theta), abs(sin(theta))) / view_size;
     float tap_depth_uv = texture2D(u_depth_map, fragment_uv + tap_delta_uv).r;
-    float tap_depth_dp = tap_depth_uv * scene_depth;
-    float depth_delta_dp = tap_depth_dp - fragment_dp.z;
-    float occlusion_z = -tap_delta_dp.y * tan(3.14 / 4.0);
-    return float(depth_delta_dp < occlusion_z);
+    float tap_z = tap_depth_uv * scene_depth;
+
+    float z = fragment_z + radius * cos(phi);
+    return float(z > tap_z);
   }
 
   void main() {
-    float seed = texture2D(u_noise, gl_FragCoord.xy / float(kNoiseSize)).r;
-    float theta0 = 6.28 * seed;
-    float fragment_depth_uv = texture2D(u_depth_map, fragment_uv).r;
-    vec3 fragment_dp = vec3(fragment_uv * view_size, fragment_depth_uv * scene_depth);
+    vec2 seed = texture2D(u_noise, gl_FragCoord.xy / float(kNoiseSize)).rg;
 
-    float occlusion = 0.0;
+    float fragment_depth_uv = texture2D(u_depth_map, fragment_uv).r;
+    float fragment_z = fragment_depth_uv * scene_depth;
+
+    float L = 0.0;
     for (int i = 0; i < kTapCount; ++i)
-      occlusion += sampleOcclusion(fragment_uv, fragment_dp, i, theta0);
-    occlusion = clamp(occlusion / float(kTapCount), 0.0, 1.0);
-    gl_FragColor = vec4(occlusion, 0.0, fragment_depth_uv, 1.0);
+      L += sampleIllumination(fragment_uv, fragment_z, i, seed);
+    L = clamp(L / float(kTapCount), 0.0, 1.0);
+    gl_FragColor = vec4(L, 0.0, fragment_depth_uv, 1.0);
   }
 )GLSL";
 

@@ -19,7 +19,7 @@ constexpr char g_vertex_shader[] = R"GLSL(
 
 constexpr char g_fragment_shader[] = R"GLSL(
   precision mediump float;
-  uniform sampler2D u_occlusions;
+  uniform sampler2D u_illumination_map;
   uniform vec2 u_tap_stride;
   varying vec2 fragment_uv;
 
@@ -28,7 +28,7 @@ constexpr char g_fragment_shader[] = R"GLSL(
   #define RADIUS 4
 
   void main() {
-    vec4 center_tap = texture2D(u_occlusions, fragment_uv);
+    vec4 center_tap = texture2D(u_illumination_map, fragment_uv);
     float center_key = center_tap.z * scene_depth;
 
     float sum = center_tap.x;
@@ -36,7 +36,7 @@ constexpr char g_fragment_shader[] = R"GLSL(
 
     for (int r = RADIUS; r >= 1; --r) {
       vec2 tap_offset = float(-r) * u_tap_stride;
-      vec4 tap = texture2D(u_occlusions, fragment_uv + tap_offset);
+      vec4 tap = texture2D(u_illumination_map, fragment_uv + tap_offset);
 
       float tap_key = tap.z * scene_depth;
       float position_weight = float(RADIUS - r + 1) / float(RADIUS + 1);
@@ -47,7 +47,7 @@ constexpr char g_fragment_shader[] = R"GLSL(
 
     for (int r = 1; r <= RADIUS; ++r) {
       vec2 tap_offset = float(r) * u_tap_stride;
-      vec4 tap = texture2D(u_occlusions, fragment_uv + tap_offset);
+      vec4 tap = texture2D(u_illumination_map, fragment_uv + tap_offset);
 
       float tap_key = tap.z * scene_depth;
       float position_weight = float(RADIUS - r + 1) / float(RADIUS + 1);
@@ -56,8 +56,8 @@ constexpr char g_fragment_shader[] = R"GLSL(
       total_weight += tap_weight;
     }
 
-    float occlusion = sum / total_weight;
-    gl_FragColor = vec4(occlusion, 0.0, center_tap.z, 1.0);
+    float illumination = sum / total_weight;
+    gl_FragColor = vec4(illumination, 0.0, center_tap.z, 1.0);
   }
 )GLSL";
 
@@ -71,8 +71,8 @@ bool LightingFilter::Compile() {
   program_ = MakeUniqueProgram(g_vertex_shader, g_fragment_shader);
   if (!program_)
     return false;
-  occlusions_ = glGetUniformLocation(program_.id(), "u_occlusions");
-  ESCHER_DCHECK(occlusions_ != -1);
+  illumination_map_ = glGetUniformLocation(program_.id(), "u_illumination_map");
+  ESCHER_DCHECK(illumination_map_ != -1);
   tap_stride_ = glGetUniformLocation(program_.id(), "u_tap_stride");
   ESCHER_DCHECK(tap_stride_ != -1);
   return true;
