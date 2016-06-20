@@ -2,45 +2,43 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "escher/shaders/solid_color_shader.h"
+#include "escher/shaders/blit_shader.h"
 
 namespace escher {
 namespace {
 
 constexpr char g_vertex_shader[] = R"GLSL(
   attribute vec3 a_position;
-  uniform mat4 u_matrix;
+  varying vec2 fragment_uv;
 
   void main() {
-    gl_Position = u_matrix * vec4(a_position, 1.0);
+    gl_Position = vec4(a_position, 1.0);
+    fragment_uv = gl_Position.xy * 0.5 + 0.5;
   }
 )GLSL";
 
 constexpr char g_fragment_shader[] = R"GLSL(
   precision mediump float;
-  uniform vec4 u_color;
+  uniform sampler2D u_source;
+  varying vec2 fragment_uv;
 
   void main() {
-    gl_FragColor = u_color;
+    gl_FragColor = texture2D(u_source, fragment_uv);
   }
 )GLSL";
 
 }  // namespace
 
-SolidColorShader::SolidColorShader() {
-}
+BlitShader::BlitShader() {}
 
-SolidColorShader::~SolidColorShader() {
-}
+BlitShader::~BlitShader() {}
 
-bool SolidColorShader::Compile() {
+bool BlitShader::Compile() {
   program_ = MakeUniqueProgram(g_vertex_shader, g_fragment_shader);
   if (!program_)
     return false;
-  matrix_ = glGetUniformLocation(program_.id(), "u_matrix");
-  ESCHER_DCHECK(matrix_ != -1);
-  color_ = glGetUniformLocation(program_.id(), "u_color");
-  ESCHER_DCHECK(color_ != -1);
+  source_ = glGetUniformLocation(program_.id(), "u_source");
+  ESCHER_DCHECK(source_ != -1);
   return true;
 }
 

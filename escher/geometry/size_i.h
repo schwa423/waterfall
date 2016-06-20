@@ -25,6 +25,8 @@ class SizeI {
     return float(width_) / height_;
   }
 
+  int area() const { return width_ * height_; }
+
   glm::vec2 AsVec2() const;
   bool Equals(const SizeI& size) const;
 

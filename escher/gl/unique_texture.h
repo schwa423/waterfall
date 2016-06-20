@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "escher/geometry/size_i.h"
 #include "escher/gl/unique_object.h"
 
 namespace escher {
@@ -17,5 +18,7 @@ inline void DeleteTexture(GLuint id) {
 
 typedef UniqueObject<internal::DeleteTexture> UniqueTexture;
 UniqueTexture MakeUniqueTexture();
+UniqueTexture MakeDepthTexture(const SizeI& size);
+UniqueTexture MakeColorTexture(const SizeI& size);
 
 }  // namespace escher

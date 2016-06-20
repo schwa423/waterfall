@@ -7,34 +7,32 @@
 #include "escher/base/macros.h"
 #include "escher/gl/unique_program.h"
 
+#include "escher/gl/extensions.h"
+
 namespace escher {
 
-class ShadowShader {
+class IlluminationShader {
  public:
-  ShadowShader();
-  ~ShadowShader();
+  IlluminationShader();
+  ~IlluminationShader();
 
   bool Compile();
 
   const UniqueProgram& program() const { return program_; }
 
-  GLint depth_map() const { return depth_map_; }
-  GLint noise() const { return noise_; }
-  // TODO(abarth): Add view size information.
+  GLint scene() const { return scene_; }
+  GLint lighting() const { return lighting_; }
 
   GLint position() const { return position_; }
-
-  // Must match fragment shader.
-  static const int kNoiseSize = 5;
 
  private:
   UniqueProgram program_;
 
-  GLint depth_map_ = 0;
-  GLint noise_ = 0;
+  GLint scene_ = 0;
+  GLint lighting_ = 0;
   GLint position_ = 0;
 
-  ESCHER_DISALLOW_COPY_AND_ASSIGN(ShadowShader);
+  ESCHER_DISALLOW_COPY_AND_ASSIGN(IlluminationShader);
 };
 
 }  // namespace escher

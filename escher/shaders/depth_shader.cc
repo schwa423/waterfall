@@ -34,11 +34,8 @@ bool DepthShader::Compile() {
   program_ = MakeUniqueProgram(g_vertex_shader, g_fragment_shader);
   if (!program_)
     return false;
-
-  matrix_ = 0;
-  glBindUniformLocation(program_.id(), matrix_, "u_matrix");
-
-  position_ = 0;
+  matrix_ = glGetUniformLocation(program_.id(), "u_matrix");
+  ESCHER_DCHECK(matrix_ != -1);
   return true;
 }
 
