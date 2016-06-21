@@ -19,15 +19,6 @@ namespace {
 constexpr bool kIlluminateScene = true;
 constexpr bool kFilterLightingBuffer = true;
 
-// Material design places objects from 0.0f to 24.0f. We inflate that range
-// slightly to avoid clipping at the edges of the viewing volume.
-constexpr float kNear = 25.0f;
-constexpr float kFar = -1.0f;
-
-// Key light parameters.
-constexpr float kKeyLightRadius = 600.0f;
-constexpr float kKeyLightElevation = 600.0f;
-
 }  // namespace
 
 Renderer::Renderer()
@@ -40,8 +31,8 @@ bool Renderer::Init() {
   InitGLExtensions();
 
   if (!blit_shader_.Compile() ||
-      !illumination_shader_.Compile() || !lighting_filter_.Compile() ||
-      !shadow_shader_.Compile() || !solid_color_shader_.Compile())
+      !illumination_shader_.Compile() || !reconstruction_filter_.Compile() ||
+      !occlusion_detector_.Compile() || !solid_color_shader_.Compile())
     return false;
 
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -51,13 +42,14 @@ bool Renderer::Init() {
   noise_texture_ = MakeNoiseTexture(
       SizeI(OcclusionDetector::kNoiseSize, OcclusionDetector::kNoiseSize));
 
+  full_frame_ = Quad::CreateFromRect(glm::vec2(-1.0f, 1.0f),
+                                     glm::vec2(2.0f, -2.0f), 0.0f);
+
   return true;
 }
 
-void Renderer::SetSize(SizeI size) {
-  if (stage_.size().Equals(size))
-    return;
-
+void Renderer::ResizeBuffers(const SizeI& size) {
+  ESCHER_DCHECK(!size_.Equals(size));
   if (!scene_buffer_.SetSize(size) || !lighting_buffer_.SetSize(size)) {
     std::cerr << "Failed to allocate frame buffer of size (" << size.width()
               << ", " << size.height() << ")." << std::endl;
@@ -65,15 +57,15 @@ void Renderer::SetSize(SizeI size) {
   }
 
   scratch_texture_ = MakeColorTexture(size);
-  full_frame_ = Quad::CreateFromRect(glm::vec2(-1.0f, 1.0f),
-                                     glm::vec2(2.0f, -2.0f), 0.0f);
-
-  stage_.set_viewing_volume(ViewingVolume(std::move(size), kNear, kFar));
+  size_ = size;
 }
 
-void Renderer::Render(const Model& model) {
-  glm::mat4 matrix = stage_.viewing_volume().GetProjectionMatrix();
-  glViewport(0, 0, stage_.size().width(), stage_.size().height());
+void Renderer::Render(const Stage& stage, const Model& model) {
+  if (!size_.Equals(stage.size()))
+    ResizeBuffers(stage.size());
+
+  glm::mat4 matrix = stage.viewing_volume().GetProjectionMatrix();
+  glViewport(0, 0, size_.width(), size_.height());
 
   glBindFramebuffer(GL_FRAMEBUFFER, scene_buffer_.frame_buffer().id());
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -97,44 +89,43 @@ void Renderer::Render(const Model& model) {
     glBindTexture(GL_TEXTURE_2D, scene_buffer_.color().id());
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, lighting_buffer_.color().id());
-    glEnableVertexAttribArray(shadow_shader_.position());
-    DrawFullFrameQuad(shadow_shader_.position());
+    glEnableVertexAttribArray(occlusion_detector_.position());
+    DrawFullFrameQuad(occlusion_detector_.position());
   }
 }
 
 void Renderer::ComputeIllumination() {
   glBindFramebuffer(GL_FRAMEBUFFER, lighting_buffer_.frame_buffer().id());
   glClear(GL_COLOR_BUFFER_BIT);
-  glUseProgram(shadow_shader_.program().id());
-  glUniform1i(shadow_shader_.depth_map(), 0);
-  glUniform1i(shadow_shader_.noise(), 1);
+  glUseProgram(occlusion_detector_.program().id());
+  glUniform1i(occlusion_detector_.depth_map(), 0);
+  glUniform1i(occlusion_detector_.noise(), 1);
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, scene_buffer_.depth().id());
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, noise_texture_.id());
-  glEnableVertexAttribArray(shadow_shader_.position());
-  DrawFullFrameQuad(shadow_shader_.position());
+  glEnableVertexAttribArray(occlusion_detector_.position());
+  DrawFullFrameQuad(occlusion_detector_.position());
 
   if (kFilterLightingBuffer) {
     scratch_texture_ =
         lighting_buffer_.SetColorTexture(std::move(scratch_texture_));
     glClear(GL_COLOR_BUFFER_BIT);
-    glUseProgram(lighting_filter_.program().id());
-    glUniform1i(lighting_filter_.illumination_map(), 0);
-    auto view_size = stage_.viewing_volume().size();
-    glUniform2f(lighting_filter_.tap_stride(), 1.0f / view_size.width(), 0.0f);
+    glUseProgram(reconstruction_filter_.program().id());
+    glUniform1i(reconstruction_filter_.illumination_map(), 0);
+    glUniform2f(reconstruction_filter_.tap_stride(), 1.0f / size_.width(), 0.0f);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, scratch_texture_.id());
-    glEnableVertexAttribArray(lighting_filter_.position());
-    DrawFullFrameQuad(shadow_shader_.position());
+    glEnableVertexAttribArray(reconstruction_filter_.position());
+    DrawFullFrameQuad(occlusion_detector_.position());
 
     scratch_texture_ =
         lighting_buffer_.SetColorTexture(std::move(scratch_texture_));
-    glUniform2f(lighting_filter_.tap_stride(), 0.0f, 1.0f / view_size.height());
+    glUniform2f(reconstruction_filter_.tap_stride(), 0.0f, 1.0f / size_.height());
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, scratch_texture_.id());
-    glEnableVertexAttribArray(lighting_filter_.position());
-    DrawFullFrameQuad(shadow_shader_.position());
+    glEnableVertexAttribArray(reconstruction_filter_.position());
+    DrawFullFrameQuad(occlusion_detector_.position());
   }
 }
 

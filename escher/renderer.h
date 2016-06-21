@@ -27,11 +27,10 @@ class Renderer {
   ~Renderer();
 
   bool Init();
-
-  void SetSize(SizeI size);
-  void Render(const Model& model);
+  void Render(const Stage& stage, const Model& model);
 
  private:
+  void ResizeBuffers(const SizeI& size);
   void Blit(GLuint texture_id);
   void DrawModelWithSolidColorShader(const Model& model,
                                      const glm::mat4& matrix);
@@ -39,7 +38,7 @@ class Renderer {
   void ComputeIllumination();
   void DrawFullFrameQuad(GLint position);
 
-  Stage stage_;
+  SizeI size_;
   FrameBuffer scene_buffer_;
   FrameBuffer lighting_buffer_;
   UniqueTexture scratch_texture_;
@@ -47,8 +46,8 @@ class Renderer {
 
   BlitShader blit_shader_;
   IlluminationShader illumination_shader_;
-  IlluminationReconstructionFilter lighting_filter_;
-  OcclusionDetector shadow_shader_;
+  IlluminationReconstructionFilter reconstruction_filter_;
+  OcclusionDetector occlusion_detector_;
   SolidColorShader solid_color_shader_;
 
   UniqueTexture noise_texture_;
