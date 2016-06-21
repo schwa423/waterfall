@@ -39,7 +39,7 @@ Renderer::~Renderer() {}
 bool Renderer::Init() {
   InitGLExtensions();
 
-  if (!blit_shader_.Compile() || !depth_shader_.Compile() ||
+  if (!blit_shader_.Compile() ||
       !illumination_shader_.Compile() || !lighting_filter_.Compile() ||
       !shadow_shader_.Compile() || !solid_color_shader_.Compile())
     return false;
@@ -49,7 +49,7 @@ bool Renderer::Init() {
   glEnable(GL_CULL_FACE);
 
   noise_texture_ = MakeNoiseTexture(
-      SizeI(ShadowShader::kNoiseSize, ShadowShader::kNoiseSize));
+      SizeI(OcclusionDetector::kNoiseSize, OcclusionDetector::kNoiseSize));
 
   return true;
 }
@@ -69,14 +69,6 @@ void Renderer::SetSize(SizeI size) {
                                      glm::vec2(2.0f, -2.0f), 0.0f);
 
   stage_.set_viewing_volume(ViewingVolume(std::move(size), kNear, kFar));
-  stage_.set_key_light(
-      DirectionalLight(glm::vec3(size.width() / 2.0f, 0.0f, kKeyLightElevation),
-                       glm::vec3(size.width() / 2.0f, kKeyLightElevation, 0.0f),
-                       kKeyLightRadius));
-  stage_.set_fill_light(
-      DomeLight(glm::vec3(size.width() / 2.0f, size.height() / 2.0f, 0.0f),
-                glm::vec3(0.0f, 0.0f, 1.0f),
-                2.0f * std::max(size.width(), size.height())));
 }
 
 void Renderer::Render(const Model& model) {

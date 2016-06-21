@@ -7,8 +7,6 @@
 #include "escher/base/macros.h"
 #include "escher/gl/unique_program.h"
 
-#include "escher/gl/extensions.h"
-
 namespace escher {
 
 class BlitShader {
@@ -20,8 +18,10 @@ class BlitShader {
 
   const UniqueProgram& program() const { return program_; }
 
+  // Uniforms
   GLint source() const { return source_; }
 
+  // Attributes
   GLint position() const { return position_; }
 
  private:

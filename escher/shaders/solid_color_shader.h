@@ -18,9 +18,11 @@ class SolidColorShader {
 
   const UniqueProgram& program() const { return program_; }
 
+  // Uniforms
   GLint matrix() const { return matrix_; }
   GLint color() const { return color_; }
 
+  // Attributes
   GLint position() const { return position_; }
 
  private:

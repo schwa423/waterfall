@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "escher/shaders/shadow_shader.h"
+#include "escher/shaders/lighting/occlusion_detector.h"
 
 namespace escher {
 namespace {
@@ -113,13 +113,13 @@ constexpr char g_fragment_shader[] = R"GLSL(
 
 }  // namespace
 
-ShadowShader::ShadowShader() {
+OcclusionDetector::OcclusionDetector() {
 }
 
-ShadowShader::~ShadowShader() {
+OcclusionDetector::~OcclusionDetector() {
 }
 
-bool ShadowShader::Compile() {
+bool OcclusionDetector::Compile() {
   program_ = MakeUniqueProgram(g_vertex_shader, g_fragment_shader);
   if (!program_)
     return false;

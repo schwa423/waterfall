@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "escher/shaders/lighting_filter.h"
+#include "escher/shaders/lighting/illumination_reconstruction_filter.h"
 
 namespace escher {
 namespace {
@@ -57,11 +57,11 @@ constexpr char g_fragment_shader[] = R"GLSL(
 
 }  // namespace
 
-LightingFilter::LightingFilter() {}
+IlluminationReconstructionFilter::IlluminationReconstructionFilter() {}
 
-LightingFilter::~LightingFilter() {}
+IlluminationReconstructionFilter::~IlluminationReconstructionFilter() {}
 
-bool LightingFilter::Compile() {
+bool IlluminationReconstructionFilter::Compile() {
   program_ = MakeUniqueProgram(g_vertex_shader, g_fragment_shader);
   if (!program_)
     return false;

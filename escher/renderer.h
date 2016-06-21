@@ -14,10 +14,9 @@
 #include "escher/scene/stage.h"
 #include "escher/scene/model.h"
 #include "escher/shaders/blit_shader.h"
-#include "escher/shaders/depth_shader.h"
-#include "escher/shaders/illumination_shader.h"
-#include "escher/shaders/lighting_filter.h"
-#include "escher/shaders/shadow_shader.h"
+#include "escher/shaders/lighting/illumination_shader.h"
+#include "escher/shaders/lighting/illumination_reconstruction_filter.h"
+#include "escher/shaders/lighting/occlusion_detector.h"
 #include "escher/shaders/solid_color_shader.h"
 
 namespace escher {
@@ -36,9 +35,6 @@ class Renderer {
   void Blit(GLuint texture_id);
   void DrawModelWithSolidColorShader(const Model& model,
                                      const glm::mat4& matrix);
-  // void DrawModelWithDepthShader(const Model& model, const glm::mat4& matrix);
-  // void DrawModelWithShadowShader(const Model& model, const glm::mat4&
-  // matrix);
 
   void ComputeIllumination();
   void DrawFullFrameQuad(GLint position);
@@ -50,10 +46,9 @@ class Renderer {
   Quad full_frame_;
 
   BlitShader blit_shader_;
-  DepthShader depth_shader_;
   IlluminationShader illumination_shader_;
-  LightingFilter lighting_filter_;
-  ShadowShader shadow_shader_;
+  IlluminationReconstructionFilter lighting_filter_;
+  OcclusionDetector shadow_shader_;
   SolidColorShader solid_color_shader_;
 
   UniqueTexture noise_texture_;

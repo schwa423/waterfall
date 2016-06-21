@@ -14,6 +14,7 @@ namespace escher {
 class Model {
  public:
   Model();
+  explicit Model(std::vector<std::unique_ptr<Object>> objects);
   ~Model();
 
   Model(Model&& other);
@@ -26,6 +27,8 @@ class Model {
 
  private:
   std::vector<std::unique_ptr<Object>> objects_;
+
+  ESCHER_DISALLOW_COPY_AND_ASSIGN(Model);
 };
 
 }  // namespace escher

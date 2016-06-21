@@ -12,15 +12,14 @@ Model::Model() {}
 
 Model::~Model() {}
 
+Model::Model(std::vector<std::unique_ptr<Object>> objects)
+  : objects_(std::move(objects)) {}
+
 Model::Model(Model&& other) : objects_(std::move(other.objects_)) {}
 
 Model& Model::operator=(Model&& other) {
   objects_ = std::move(other.objects_);
   return *this;
-}
-
-void Model::AddObject(std::unique_ptr<Object> obj) {
-  objects_.emplace_back(std::move(obj));
 }
 
 }  // namespace escher

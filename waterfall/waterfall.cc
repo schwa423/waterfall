@@ -64,32 +64,33 @@ class WaterfallApplication : public SampleApplication {
       renderer_.Render(model);
       return;
     }
-    escher::Model model;
+    std::vector<std::unique_ptr<escher::Object>> objects;
 
     // app bar
-    model.AddObject(escher::Object::CreateRect(
+    objects.emplace_back(escher::Object::CreateRect(
         glm::vec2(0.0f, 0.0f), glm::vec2(window_size_.width(), 56.0f), 4.0f,
         &app_bar_material_));
 
-    model.AddObject(escher::Object::CreateRect(glm::vec2(100.0f, 180.0f),
+    objects.emplace_back(escher::Object::CreateRect(glm::vec2(100.0f, 180.0f),
                                                glm::vec2(60.0f, 40.0f), 10.0f,
                                                &green_material_));
-    model.AddObject(escher::Object::CreateRect(glm::vec2(200.0f, 180.0f),
+    objects.emplace_back(escher::Object::CreateRect(glm::vec2(200.0f, 180.0f),
                                                glm::vec2(60.0f, 40.0f), 16.0f,
                                                &green_material_));
-    model.AddObject(escher::Object::CreateRect(
+    objects.emplace_back(escher::Object::CreateRect(
         glm::vec2(0.0f, 200.0f), glm::vec2(window_size_.width(), 80.0f), 2.0f,
         &card_material_));
 
     // canvas
-    model.AddObject(escher::Object::CreateRect(
+    objects.emplace_back(escher::Object::CreateRect(
         glm::vec2(0.0f, 0.0f), window_size_.AsVec2(), 0.0f, &canvas_material_));
 
     // fab
-    model.AddObject(escher::Object::CreateCircle(
+    objects.emplace_back(escher::Object::CreateCircle(
         glm::vec2(fab_x_ - kFabSize / 2.0f, fab_y_ - kFabSize / 2.0f), kFabSize,
         6.0f, &fab_material_));
-    renderer_.Render(model);
+
+    renderer_.Render(escher::Model(std::move(objects)));
   }
 
  private:

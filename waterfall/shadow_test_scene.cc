@@ -24,7 +24,7 @@ ShadowTestScene::ShadowTestScene() {
 ShadowTestScene::~ShadowTestScene() {}
 
 escher::Model ShadowTestScene::GetModel(const escher::SizeI& size) {
-  escher::Model model;
+  std::vector<std::unique_ptr<escher::Object>> objects;
 
   float center = size.width() / 2.0f;
 
@@ -35,17 +35,17 @@ escher::Model ShadowTestScene::GetModel(const escher::SizeI& size) {
   float top = kPadding;
   float tile_size = center - kPadding - kPadding;
 
-  model.AddObject(escher::Object::CreateRect(
+  objects.emplace_back(escher::Object::CreateRect(
       glm::vec2(0.0f, 0.0f), glm::vec2(size.width(), size.height()), 0.0f,
       &card_material_));
 
   for (int i = 0; i < arraysize(kElevations); ++i) {
-    model.AddObject(escher::Object::CreateRect(
+    objects.emplace_back(escher::Object::CreateRect(
         glm::vec2(left[i % 2], top), glm::vec2(tile_size, tile_size),
         kElevations[i], &card_material_));
     if (i % 2 == 1)
       top += tile_size + kPadding + kPadding;
   }
 
-  return model;
+  return escher::Model(std::move(objects));
 }

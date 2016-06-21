@@ -10,28 +10,30 @@
 
 namespace escher {
 
+// Directional light is emitted from a particular point at infinity with some
+// angular dispersion.
 class DirectionalLight {
  public:
   DirectionalLight();
-  DirectionalLight(glm::vec3 source, glm::vec3 target, float radius);
+  DirectionalLight(glm::vec2 direction, float dispersion, float intensity);
   ~DirectionalLight();
 
-  // The center of the area that emits the light.
-  const glm::vec3& source() const { return source_; }
+  // The direction from which the light is received. The first coordinate is
+  // theta (the the azimuthal angle) and the second coordinate is phi (the polar
+  // angle).
+  const glm::vec2& direction() const { return direction_; }
 
-  // A location intersected by a light ray emitted from the center of the light.
-  const glm::vec3& target() const { return target_; }
+  // The amount of angular variance in the light, in radians.
+  float dispersion() const { return dispersion_; }
 
-  // The radius of the area that emits the light.
-  float radius() const { return radius_; }
-
-  glm::mat4 GetProjectionMatrix(const ViewingVolume& viewing_volume) const;
+  // The amount of light emitted.
+  // TODO(abarth): In what units?
+  float intensity() const { return intensity_; }
 
  private:
-  glm::vec3 source_;
-  glm::vec3 target_;
-  float radius_ = 0.0f;
-  float fov_ = 0.0f;
+  glm::vec2 direction_;
+  float dispersion_ = 0.0f;
+  float intensity_ = 0.0f;
 };
 
 }  // namespace escher

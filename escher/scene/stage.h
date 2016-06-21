@@ -7,8 +7,8 @@
 #include <utility>
 
 #include "escher/base/macros.h"
+#include "escher/scene/ambient_light.h"
 #include "escher/scene/directional_light.h"
-#include "escher/scene/dome_light.h"
 #include "escher/scene/viewing_volume.h"
 
 namespace escher {
@@ -28,13 +28,13 @@ class Stage {
   const DirectionalLight& key_light() const { return key_light_; }
   void set_key_light(DirectionalLight value) { key_light_ = std::move(value); }
 
-  const DomeLight& fill_light() const { return fill_light_; }
-  void set_fill_light(DomeLight value) { fill_light_ = std::move(value); }
+  const AmbientLight& fill_light() const { return fill_light_; }
+  void set_fill_light(AmbientLight value) { fill_light_ = std::move(value); }
 
  private:
   ViewingVolume viewing_volume_;
   DirectionalLight key_light_;
-  DomeLight fill_light_;
+  AmbientLight fill_light_;
 
   ESCHER_DISALLOW_COPY_AND_ASSIGN(Stage);
 };

@@ -9,24 +9,34 @@
 
 namespace escher {
 
-class DepthShader {
+class OcclusionDetector {
  public:
-  DepthShader();
-  ~DepthShader();
+  OcclusionDetector();
+  ~OcclusionDetector();
 
   bool Compile();
 
   const UniqueProgram& program() const { return program_; }
 
-  GLint matrix() const { return matrix_; }
+  // Uniforms
+  GLint depth_map() const { return depth_map_; }
+  GLint noise() const { return noise_; }
+  // TODO(abarth): Add view size information.
+
+  // Attributes
   GLint position() const { return position_; }
+
+  // Must match fragment shader.
+  static const int kNoiseSize = 5;
 
  private:
   UniqueProgram program_;
-  GLint matrix_ = 0;
+
+  GLint depth_map_ = 0;
+  GLint noise_ = 0;
   GLint position_ = 0;
 
-  ESCHER_DISALLOW_COPY_AND_ASSIGN(DepthShader);
+  ESCHER_DISALLOW_COPY_AND_ASSIGN(OcclusionDetector);
 };
 
 }  // namespace escher

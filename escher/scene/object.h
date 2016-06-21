@@ -33,7 +33,7 @@ class Object {
   GLsizei index_count() const { return Quad::GetIndexCount(); }
 
  private:
-  Object(const Material* material);
+  explicit Object(const Material* material);
 
   const Material* material_;
   Quad quad_;  // TODO(jeffbrown): generalize to arbitrary mesh with attributes
