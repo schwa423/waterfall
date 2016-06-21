@@ -4,11 +4,19 @@
 
 #include "escher/scene/model.h"
 
+#include <utility>
+
 namespace escher {
 
 Model::Model() {}
 
 Model::~Model() {}
+
+Model::Model(Model&& other) : objects_(std::move(other.objects_)) {}
+
+Model& Model::operator=(Model&& other) {
+  objects_ = std::move(other.objects_);
+}
 
 void Model::AddObject(std::unique_ptr<Object> obj) {
   objects_.emplace_back(std::move(obj));

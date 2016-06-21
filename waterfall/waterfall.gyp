@@ -19,6 +19,8 @@
       '../third_party/glm',
     ],
     'sources': [
+      'shadow_test_scene.cc',
+      'shadow_test_scene.h',
       'waterfall.cc',
     ],
   }],

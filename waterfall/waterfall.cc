@@ -5,6 +5,7 @@
 #include "escher/base/macros.h"
 #include "escher/renderer.h"
 #include "samples/sample_util/SampleApplication.h"
+#include "waterfall/shadow_test_scene.h"
 
 #include <glm/glm.hpp>
 
@@ -13,6 +14,8 @@ namespace {
 constexpr float kFabSize = 56.0f;
 constexpr int kDefaultWindowWidth = 360;
 constexpr int kDefaultWindowHeight = 640;
+
+constexpr bool kDrawShadowTestScene = false;
 
 }  // namespace
 
@@ -56,6 +59,11 @@ class WaterfallApplication : public SampleApplication {
   }
 
   void draw() override {
+    if (kDrawShadowTestScene) {
+      escher::Model model = shadow_test_scene_.GetModel(window_size_);
+      renderer_.Render(model);
+      return;
+    }
     escher::Model model;
 
     // app bar
@@ -85,6 +93,8 @@ class WaterfallApplication : public SampleApplication {
   }
 
  private:
+  ShadowTestScene shadow_test_scene_;
+
   escher::Material app_bar_material_;
   escher::Material canvas_material_;
   escher::Material card_material_;

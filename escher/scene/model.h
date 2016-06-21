@@ -16,6 +16,9 @@ class Model {
   Model();
   ~Model();
 
+  Model(Model&& other);
+  Model& operator=(Model&& other);
+
   void AddObject(std::unique_ptr<Object> obj);
   const std::vector<std::unique_ptr<Object>>& objects() const {
     return objects_;
