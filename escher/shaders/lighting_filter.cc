@@ -34,26 +34,20 @@ constexpr char g_fragment_shader[] = R"GLSL(
     float sum = center_tap.x;
     float total_weight = 1.0;
 
-    for (int r = RADIUS; r >= 1; --r) {
-      vec2 tap_offset = float(-r) * u_tap_stride;
-      vec4 tap = texture2D(u_illumination_map, fragment_uv + tap_offset);
-
-      float tap_key = tap.z * scene_depth;
-      float position_weight = float(RADIUS - r + 1) / float(RADIUS + 1);
-      float tap_weight = position_weight * max(0.0, 1.0 - abs(tap_key - center_key));
-      sum += tap_weight * tap.x;
-      total_weight += tap_weight;
-    }
-
     for (int r = 1; r <= RADIUS; ++r) {
-      vec2 tap_offset = float(r) * u_tap_stride;
-      vec4 tap = texture2D(u_illumination_map, fragment_uv + tap_offset);
+      vec4 left_tap = texture2D(u_illumination_map, fragment_uv + float(-r) * u_tap_stride);
+      float left_tap_key = left_tap.z * scene_depth;
+      float left_key_weight = max(0.0, 1.0 - abs(left_tap_key - center_key));
 
-      float tap_key = tap.z * scene_depth;
+      vec4 right_tap = texture2D(u_illumination_map, fragment_uv + float(r) * u_tap_stride);
+      float right_tap_key = right_tap.z * scene_depth;
+      float right_key_weight = max(0.0, 1.0 - abs(right_tap_key - center_key));
+
       float position_weight = float(RADIUS - r + 1) / float(RADIUS + 1);
-      float tap_weight = position_weight * max(0.0, 1.0 - abs(tap_key - center_key));
-      sum += tap_weight * tap.x;
-      total_weight += tap_weight;
+      float tap_weight = position_weight * left_key_weight * right_key_weight;
+
+      sum += tap_weight * left_tap.x + tap_weight * right_tap.x;
+      total_weight += 2.0 * tap_weight;
     }
 
     float illumination = sum / total_weight;

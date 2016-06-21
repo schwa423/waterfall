@@ -9,7 +9,8 @@
 namespace {
 
 constexpr int kElevations[] = {
-    1, 2, 3, 4, 6, 8, 9, 12, 16, 24,
+  1, 2, 3, 4,
+  6, 8, 9, 12, 16, 24,
 };
 
 constexpr float kPadding = 20.0f;

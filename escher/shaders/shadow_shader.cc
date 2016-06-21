@@ -38,7 +38,7 @@ constexpr char g_fragment_shader[] = R"GLSL(
   // These should be relatively primary to each other and to kTapCount;
   const vec2 kSpirals = vec2(7.0, 5.0);
 
-  const float kSampleHemisphereRadius = 32.0;  // screen pixels.
+  const float kSampleHemisphereRadius = 16.0;  // screen pixels.
 
   // Terminology:
   //
@@ -57,21 +57,40 @@ constexpr char g_fragment_shader[] = R"GLSL(
   const float kLightDispersion = kPi / 4.0;
   const vec2 kLight0 = kLight - kLightDispersion / 2.0;
 
-  float sampleIllumination(vec2 fragment_uv,
-                           float fragment_z,
-                           int index,
-                           vec2 seed) {
-    float alpha = (float(index) + 0.5) / float(kTapCount);
+  const float kKeyLightIntensity = 0.5;
+  const float kFillLightIntensity = 1.0 - kKeyLightIntensity;
+
+  float sampleKeyIllumination(vec2 fragment_uv,
+                              float fragment_z,
+                              float alpha,
+                              vec2 seed) {
     vec2 polar = kLight0 + fract(seed + alpha * kSpirals) * kLightDispersion;
     float theta = polar.x;
     float phi = polar.y;
     float radius = alpha * kSampleHemisphereRadius;
 
-    vec2 tap_delta_uv = radius * sin(phi) * vec2(cos(theta), abs(sin(theta))) / view_size;
+    vec2 tap_delta_uv = radius * sin(phi) * vec2(cos(theta), sin(theta)) / view_size;
     float tap_depth_uv = texture2D(u_depth_map, fragment_uv + tap_delta_uv).r;
     float tap_z = tap_depth_uv * scene_depth;
 
-    float z = fragment_z + radius * cos(phi);
+    float z = fragment_z + radius * abs(cos(phi));
+    return float(z > tap_z);
+  }
+
+  float sampleFillIllumination(vec2 fragment_uv,
+                               float fragment_z,
+                               float alpha,
+                               vec2 seed) {
+    vec2 polar = 2.0 * kPi * (seed + alpha * kSpirals);
+    float theta = polar.x;
+    float phi = polar.y;
+    float radius = alpha * kSampleHemisphereRadius;
+
+    vec2 tap_delta_uv = radius * sin(phi) * vec2(cos(theta), sin(theta)) / view_size;
+    float tap_depth_uv = texture2D(u_depth_map, fragment_uv + tap_delta_uv).r;
+    float tap_z = tap_depth_uv * scene_depth;
+
+    float z = fragment_z + radius * abs(cos(phi));
     return float(z > tap_z);
   }
 
@@ -82,8 +101,11 @@ constexpr char g_fragment_shader[] = R"GLSL(
     float fragment_z = fragment_depth_uv * scene_depth;
 
     float L = 0.0;
-    for (int i = 0; i < kTapCount; ++i)
-      L += sampleIllumination(fragment_uv, fragment_z, i, seed);
+    for (int i = 0; i < kTapCount; ++i) {
+      float alpha = (float(i) + 0.5) / float(kTapCount);
+      L += kKeyLightIntensity * sampleKeyIllumination(fragment_uv, fragment_z, alpha, seed);
+      L += kFillLightIntensity * sampleFillIllumination(fragment_uv, fragment_z, alpha, seed);
+    }
     L = clamp(L / float(kTapCount), 0.0, 1.0);
     gl_FragColor = vec4(L, 0.0, fragment_depth_uv, 1.0);
   }
