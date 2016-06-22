@@ -4,29 +4,32 @@
 
 #pragma once
 
-#include <memory>
 #include <vector>
 
+#include "escher/base/macros.h"
 #include "escher/scene/object.h"
 
 namespace escher {
 
+// The model to render.
+//
+// TODO(jeffbrown): This currently only contains a vector of objects to be
+// rendered but later on we may store additional resources used to
+// interpret the contents of the model (such as tunable parameters).
 class Model {
  public:
   Model();
-  explicit Model(std::vector<std::unique_ptr<Object>> objects);
+  explicit Model(std::vector<Object> objects);
   ~Model();
 
   Model(Model&& other);
   Model& operator=(Model&& other);
 
-  void AddObject(std::unique_ptr<Object> obj);
-  const std::vector<std::unique_ptr<Object>>& objects() const {
-    return objects_;
-  }
+  // Objects in back to front draw order.
+  const std::vector<Object>& objects() const { return objects_; }
 
  private:
-  std::vector<std::unique_ptr<Object>> objects_;
+  std::vector<Object> objects_;
 
   ESCHER_DISALLOW_COPY_AND_ASSIGN(Model);
 };

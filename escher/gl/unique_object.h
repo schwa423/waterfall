@@ -13,15 +13,13 @@ namespace escher {
 
 typedef void (*ObjectDeleter)(const GLuint id);
 
-template<ObjectDeleter Delete>
+template <ObjectDeleter Delete>
 class UniqueObject {
  public:
   UniqueObject() = default;
   ~UniqueObject() = default;
 
-  UniqueObject(UniqueObject<Delete>&& other) : id_(other.id_) {
-    other.id_ = 0;
-  }
+  UniqueObject(UniqueObject<Delete>&& other) : id_(other.id_) { other.id_ = 0; }
 
   UniqueObject<Delete>& operator=(UniqueObject<Delete>&& other) {
     std::swap(id_, other.id_);

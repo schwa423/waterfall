@@ -7,14 +7,14 @@
 #include <string>
 
 #include "escher/gl/unique_object.h"
+#include "escher/gl/unique_shader.h"
 
 namespace escher {
 
-typedef UniqueObject<glDeleteShader> UniqueShader;
-UniqueShader MakeUniqueShader(GLenum type, const std::string& source);
-
 typedef UniqueObject<glDeleteProgram> UniqueProgram;
-UniqueProgram MakeUniqueProgram(const std::string& vertex_shader,
-                                const std::string& fragment_shader);
+UniqueProgram MakeUniqueProgram(UniqueShader vertex_shader,
+                                UniqueShader fragment_shader);
+UniqueProgram MakeUniqueProgram(const std::string& vertex_shader_source,
+                                const std::string& fragment_shader_source);
 
 }  // namespace escher

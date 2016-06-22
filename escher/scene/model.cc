@@ -12,8 +12,7 @@ Model::Model() {}
 
 Model::~Model() {}
 
-Model::Model(std::vector<std::unique_ptr<Object>> objects)
-  : objects_(std::move(objects)) {}
+Model::Model(std::vector<Object> objects) : objects_(std::move(objects)) {}
 
 Model::Model(Model&& other) : objects_(std::move(other.objects_)) {}
 

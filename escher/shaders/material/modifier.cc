@@ -2,15 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "escher/scene/object.h"
+#include "escher/shaders/material/modifier.h"
 
 namespace escher {
 
-Object::Object(const Shape& shape, const Material* material)
-    : shape_(shape), material_(material) {
-  ESCHER_DCHECK(material);
-}
+Modifier::Modifier() {}
 
-Object::~Object() {}
+Modifier::~Modifier() {}
 
 }  // namespace escher

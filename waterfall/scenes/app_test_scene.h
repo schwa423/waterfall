@@ -19,6 +19,7 @@ class AppTestScene {
   escher::Material card_material_;
   escher::Material fab_material_;
   escher::Material green_material_;
+  escher::Material null_material_;
 
   ESCHER_DISALLOW_COPY_AND_ASSIGN(AppTestScene);
 };

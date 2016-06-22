@@ -6,18 +6,24 @@
 
 #include <glm/glm.hpp>
 
+#include "escher/scene/binding.h"
+
 namespace escher {
 
+// Texture and shading properties to apply to a surface.
 class Material {
  public:
   Material();
   ~Material();
 
-  void set_color(const glm::vec4& color) { color_ = color; }
-  const glm::vec4& color() const { return color_; }
+  // Base color, default is none.
+  void set_color(const Binding<glm::vec4>& color) { color_ = color; }
+  const Binding<glm::vec4>& color() const { return color_; }
+
+  // TODO(jeffbrown): Displacement, normals.
 
  private:
-  glm::vec4 color_;
+  Binding<glm::vec4> color_;
 };
 
 }  // namespace escher

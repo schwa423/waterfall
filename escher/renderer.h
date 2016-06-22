@@ -11,13 +11,13 @@
 #include "escher/geometry/quad.h"
 #include "escher/geometry/size_i.h"
 #include "escher/gl/frame_buffer.h"
+#include "escher/rendering/model_renderer.h"
 #include "escher/scene/stage.h"
 #include "escher/scene/model.h"
 #include "escher/shaders/blit_shader.h"
 #include "escher/shaders/lighting/illumination_shader.h"
 #include "escher/shaders/lighting/illumination_reconstruction_filter.h"
 #include "escher/shaders/lighting/occlusion_detector.h"
-#include "escher/shaders/solid_color_shader.h"
 
 namespace escher {
 
@@ -32,8 +32,7 @@ class Renderer {
  private:
   void ResizeBuffers(const SizeI& size);
   void Blit(GLuint texture_id);
-  void DrawModelWithSolidColorShader(const Model& model,
-                                     const glm::mat4& matrix);
+  void DrawModel(const Model& model, const glm::mat4& matrix);
 
   void ComputeIllumination(const Stage& stage);
   void DrawFullFrameQuad(GLint position);
@@ -48,7 +47,7 @@ class Renderer {
   IlluminationShader illumination_shader_;
   IlluminationReconstructionFilter reconstruction_filter_;
   OcclusionDetector occlusion_detector_;
-  SolidColorShader solid_color_shader_;
+  ModelRenderer model_renderer_;
 
   UniqueTexture noise_texture_;
 

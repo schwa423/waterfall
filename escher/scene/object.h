@@ -5,40 +5,28 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <memory>
 
-#include "escher/base/macros.h"
-#include "escher/geometry/quad.h"
 #include "escher/scene/material.h"
+#include "escher/scene/shape.h"
 
 namespace escher {
 
+// An object instance to be drawn using a shape and a material.
+// Does not retain ownership of the material.
 class Object {
  public:
+  Object(const Shape& shape, const Material* material);
   ~Object();
 
-  static std::unique_ptr<Object> CreateRect(const glm::vec2& position,
-                                            const glm::vec2& size,
-                                            float z,
-                                            const Material* material);
-  static std::unique_ptr<Object> CreateCircle(const glm::vec2& position,
-                                              float radius,
-                                              float z,
-                                              const Material* material);
+  // The shape to draw.
+  const Shape& shape() const { return shape_; }
 
+  // The material with which to fill the shape.
   const Material* material() const { return material_; }
 
-  const float* positions() const { return quad_.data(); }
-  const unsigned short* indices() const { return Quad::GetIndices(); }
-  int index_count() const { return Quad::GetIndexCount(); }
-
  private:
-  explicit Object(const Material* material);
-
+  Shape shape_;
   const Material* material_;
-  Quad quad_;  // TODO(jeffbrown): generalize to arbitrary mesh with attributes
-
-  ESCHER_DISALLOW_COPY_AND_ASSIGN(Object);
 };
 
 }  // namespace escher

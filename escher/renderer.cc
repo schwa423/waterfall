@@ -26,9 +26,8 @@ Renderer::Renderer()
 Renderer::~Renderer() {}
 
 bool Renderer::Init() {
-  if (!blit_shader_.Compile() ||
-      !illumination_shader_.Compile() || !reconstruction_filter_.Compile() ||
-      !occlusion_detector_.Compile() || !solid_color_shader_.Compile())
+  if (!blit_shader_.Compile() || !illumination_shader_.Compile() ||
+      !reconstruction_filter_.Compile() || !occlusion_detector_.Compile())
     return false;
 
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -63,13 +62,7 @@ void Renderer::Render(const Stage& stage, const Model& model) {
   glm::mat4 matrix = stage.viewing_volume().GetProjectionMatrix();
   glViewport(0, 0, size_.width(), size_.height());
 
-  glBindFramebuffer(GL_FRAMEBUFFER, scene_buffer_.frame_buffer().id());
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_BLEND);
-  DrawModelWithSolidColorShader(model, matrix);
-  glDisable(GL_DEPTH_TEST);
-  glDisable(GL_BLEND);
+  model_renderer_.DrawModel(model, matrix, scene_buffer_.frame_buffer());
 
   ComputeIllumination(stage);
 
@@ -116,7 +109,8 @@ void Renderer::ComputeIllumination(const Stage& stage) {
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(reconstruction_filter_.program().id());
     glUniform1i(reconstruction_filter_.illumination_map(), 0);
-    glUniform2f(reconstruction_filter_.tap_stride(), 1.0f / size_.width(), 0.0f);
+    glUniform2f(reconstruction_filter_.tap_stride(), 1.0f / size_.width(),
+                0.0f);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, scratch_texture_.id());
     glEnableVertexAttribArray(reconstruction_filter_.position());
@@ -124,7 +118,8 @@ void Renderer::ComputeIllumination(const Stage& stage) {
 
     scratch_texture_ =
         lighting_buffer_.SetColorTexture(std::move(scratch_texture_));
-    glUniform2f(reconstruction_filter_.tap_stride(), 0.0f, 1.0f / size_.height());
+    glUniform2f(reconstruction_filter_.tap_stride(), 0.0f,
+                1.0f / size_.height());
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, scratch_texture_.id());
     glEnableVertexAttribArray(reconstruction_filter_.position());
@@ -139,23 +134,6 @@ void Renderer::Blit(GLuint texture_id) {
   glBindTexture(GL_TEXTURE_2D, texture_id);
   glEnableVertexAttribArray(blit_shader_.position());
   DrawFullFrameQuad(blit_shader_.position());
-}
-
-void Renderer::DrawModelWithSolidColorShader(const Model& model,
-                                             const glm::mat4& matrix) {
-  glUseProgram(solid_color_shader_.program().id());
-  glEnableVertexAttribArray(solid_color_shader_.position());
-  glUniformMatrix4fv(solid_color_shader_.matrix(), 1, GL_FALSE, &matrix[0][0]);
-
-  for (const auto& obj : model.objects()) {
-    const glm::vec4& color = obj->material()->color();
-    glUniform4f(solid_color_shader_.color(), color.x, color.y, color.z,
-                color.w);
-    glVertexAttribPointer(solid_color_shader_.position(), 3, GL_FLOAT, GL_FALSE,
-                          0, obj->positions());
-    glDrawElements(GL_TRIANGLES, obj->index_count(), GL_UNSIGNED_SHORT,
-                   obj->indices());
-  }
 }
 
 void Renderer::DrawFullFrameQuad(GLint position) {
