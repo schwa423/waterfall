@@ -19,9 +19,27 @@ constexpr char g_vertex_shader[] = R"GLSL(
 
 constexpr char g_fragment_shader[] = R"GLSL(
   precision mediump float;
+
+  // Depth information about the scene.
+  //
+  // The shader assumes that the depth information in the r channel.
   uniform sampler2D u_depth_map;
+
+  // A random texture of size kNoiseSize.
   uniform sampler2D u_noise;
+
+  // The size of the viewing volume in (width, height, depth).
   uniform vec3 u_viewing_volume;
+
+  // A description of the directional key light:
+  //
+  //  * theta, phi: The direction from which the light is received. The first
+  //    coordinate is theta (the the azimuthal angle, in radians) and the second
+  //    coordinate is phi (the polar angle, in radians).
+  //  * dispersion: The angular variance in the light, in radians.
+  //  * intensity: The amount of light emitted.
+  uniform vec4 u_key_light;
+
   varying vec2 fragment_uv;
 
   const float kPi = 3.14159265359;
@@ -35,33 +53,16 @@ constexpr char g_fragment_shader[] = R"GLSL(
   // These should be relatively primary to each other and to kTapCount;
   const vec2 kSpirals = vec2(7.0, 5.0);
 
+  // TODO(abarth): Make the shader less sensitive to this parameter.
   const float kSampleHemisphereRadius = 16.0;  // screen pixels.
-
-  // Terminology:
-  //
-  //  * theta is the azimuthal angle
-  //  * phi for the polar angle
-
-  // The light's primary direction in polar coordinates, (theta, phi). For
-  // simplicity, we assume that the light is infinitely far away (i.e., the
-  // light is directional from this direction).
-  const vec2 kLight = vec2(kPi / 2.0, kPi / 4.0);
-
-  // Along the light is directional, the light has some amount of angular
-  // dispersion (i.e., the light is not fully columnated). For simplicity, we
-  // assume the dispersion of the light source is symmetric about the light's
-  // primary direction.
-  const float kLightDispersion = kPi / 4.0;
-  const vec2 kLight0 = kLight - kLightDispersion / 2.0;
-
-  const float kKeyLightIntensity = 0.5;
-  const float kFillLightIntensity = 1.0 - kKeyLightIntensity;
 
   float sampleKeyIllumination(vec2 fragment_uv,
                               float fragment_z,
                               float alpha,
                               vec2 seed) {
-    vec2 polar = kLight0 + fract(seed + alpha * kSpirals) * kLightDispersion;
+    float key_light_dispersion = u_key_light.z;
+    vec2 key_light0 = u_key_light.xy - key_light_dispersion / 2.0;
+    vec2 polar = key_light0 + fract(seed + alpha * kSpirals) * key_light_dispersion;
     float theta = polar.x;
     float phi = polar.y;
     float radius = alpha * kSampleHemisphereRadius;
@@ -97,11 +98,14 @@ constexpr char g_fragment_shader[] = R"GLSL(
     float fragment_depth_uv = texture2D(u_depth_map, fragment_uv).r;
     float fragment_z = fragment_depth_uv * -u_viewing_volume.z;
 
+    float key_light_intensity = u_key_light.w;
+    float fill_light_intensity = 1.0 - key_light_intensity;
+
     float L = 0.0;
     for (int i = 0; i < kTapCount; ++i) {
       float alpha = (float(i) + 0.5) / float(kTapCount);
-      L += kKeyLightIntensity * sampleKeyIllumination(fragment_uv, fragment_z, alpha, seed);
-      L += kFillLightIntensity * sampleFillIllumination(fragment_uv, fragment_z, alpha, seed);
+      L += key_light_intensity * sampleKeyIllumination(fragment_uv, fragment_z, alpha, seed);
+      L += fill_light_intensity * sampleFillIllumination(fragment_uv, fragment_z, alpha, seed);
     }
     L = clamp(L / float(kTapCount), 0.0, 1.0);
     gl_FragColor = vec4(L, 0.0, fragment_depth_uv, 1.0);
@@ -126,6 +130,8 @@ bool OcclusionDetector::Compile() {
   ESCHER_DCHECK(noise_ != -1);
   viewing_volume_ = glGetUniformLocation(program_.id(), "u_viewing_volume");
   ESCHER_DCHECK(viewing_volume_ != -1);
+  key_light_ = glGetUniformLocation(program_.id(), "u_key_light");
+  ESCHER_DCHECK(key_light_ != -1);
   return true;
 }
 

@@ -103,6 +103,10 @@ void Renderer::ComputeIllumination(const Stage& stage) {
   auto& size = stage.size();
   glUniform3f(occlusion_detector_.viewing_volume(), size.width(), size.height(),
               stage.viewing_volume().depth());
+  auto& key_light = stage.key_light();
+  glUniform4f(occlusion_detector_.key_light(), key_light.direction().x,
+              key_light.direction().y, key_light.dispersion(),
+              key_light.intensity());
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, scene_buffer_.depth().id());
   glActiveTexture(GL_TEXTURE1);

@@ -2,12 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include <glm/glm.hpp>
+#include <math.h>
+
 #include "escher/base/macros.h"
 #include "escher/renderer.h"
 #include "samples/sample_util/SampleApplication.h"
 #include "waterfall/shadow_test_scene.h"
-
-#include <glm/glm.hpp>
 
 namespace {
 
@@ -34,11 +35,15 @@ class WaterfallApplication : public SampleApplication {
     app_bar_material_.set_color(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
     canvas_material_.set_color(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     card_material_.set_color(glm::vec4(1.0f, 1.0f, 0.8f, 1.0f));
-    fab_material_.set_color(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    fab_material_.set_color(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     green_material_.set_color(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
   }
 
-  bool initialize() override { return renderer_.Init(); }
+  bool initialize() override {
+    stage_.set_key_light(escher::DirectionalLight(
+        glm::vec2(M_PI / 2.0, M_PI / 4.0), M_PI / 4.0, 0.5));
+    return renderer_.Init();
+  }
 
   void step(float dt, double total_time) override {
     // TODO(abarth): We should convert total_time to TimePoint.

@@ -22,6 +22,7 @@ class OcclusionDetector {
   GLint depth_map() const { return depth_map_; }
   GLint noise() const { return noise_; }
   GLint viewing_volume() const { return viewing_volume_; }
+  GLint key_light() const { return key_light_; }
 
   // Attributes
   GLint position() const { return position_; }
@@ -35,6 +36,7 @@ class OcclusionDetector {
   GLint depth_map_ = 0;
   GLint noise_ = 0;
   GLint viewing_volume_ = 0;
+  GLint key_light_ = 0;
   GLint position_ = 0;
 
   ESCHER_DISALLOW_COPY_AND_ASSIGN(OcclusionDetector);

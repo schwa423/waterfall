@@ -10,8 +10,12 @@
 
 namespace escher {
 
-// Directional light is emitted from a particular point at infinity with some
-// angular dispersion.
+// Directional light is emitted from a particular point at infinity.
+//
+// Although the light is directional, the light has some amount of angular
+// dispersion (i.e., the light is not fully columnated). For simplicity, we
+// assume the dispersion of the light source is symmetric about the light's
+// primary direction.
 class DirectionalLight {
  public:
   DirectionalLight();
@@ -19,11 +23,11 @@ class DirectionalLight {
   ~DirectionalLight();
 
   // The direction from which the light is received. The first coordinate is
-  // theta (the the azimuthal angle) and the second coordinate is phi (the polar
-  // angle).
+  // theta (the the azimuthal angle, in radians) and the second coordinate is
+  // phi (the polar angle, in radians).
   const glm::vec2& direction() const { return direction_; }
 
-  // The amount of angular variance in the light, in radians.
+  // The angular variance in the light, in radians.
   float dispersion() const { return dispersion_; }
 
   // The amount of light emitted.
