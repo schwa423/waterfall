@@ -24,6 +24,7 @@ class Stage {
   }
 
   const SizeI& size() const { return viewing_volume_.size(); }
+  void SetSize(SizeI size);
 
   const DirectionalLight& key_light() const { return key_light_; }
   void set_key_light(DirectionalLight value) { key_light_ = std::move(value); }

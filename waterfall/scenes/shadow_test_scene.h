@@ -3,7 +3,8 @@
 // found in the LICENSE file.
 
 #include "escher/base/macros.h"
-#include "escher/renderer.h"
+#include "escher/geometry/size_i.h"
+#include "escher/scene/model.h"
 
 class ShadowTestScene {
  public:

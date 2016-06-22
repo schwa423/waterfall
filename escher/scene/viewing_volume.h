@@ -18,6 +18,9 @@ class ViewingVolume {
   ~ViewingVolume();
 
   const SizeI& size() const { return size_; }
+  float near() const { return near_; }
+  float far() const { return far_; }
+
   float depth() const { return std::abs(near_ - far_); }
 
   glm::mat4 GetProjectionMatrix() const;

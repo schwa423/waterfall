@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "waterfall/shadow_test_scene.h"
+#include "waterfall/scenes/shadow_test_scene.h"
 
 #include "escher/base/arraysize.h"
+#include "escher/renderer.h"
 
 namespace {
 
 constexpr int kElevations[] = {
-  1, 2, 3, 4,
-  6, 8, 9, 12, 16, 24,
+    1, 2, 3, 4, 6, 8, 9, 12, 16, 24,
 };
 
 constexpr float kPadding = 20.0f;
