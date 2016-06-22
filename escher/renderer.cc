@@ -75,7 +75,7 @@ void Renderer::Render(const Stage& stage, const Model& model) {
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_BLEND);
 
-  ComputeIllumination();
+  ComputeIllumination(stage);
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glClear(GL_COLOR_BUFFER_BIT);
@@ -89,17 +89,20 @@ void Renderer::Render(const Stage& stage, const Model& model) {
     glBindTexture(GL_TEXTURE_2D, scene_buffer_.color().id());
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, lighting_buffer_.color().id());
-    glEnableVertexAttribArray(occlusion_detector_.position());
-    DrawFullFrameQuad(occlusion_detector_.position());
+    glEnableVertexAttribArray(illumination_shader_.position());
+    DrawFullFrameQuad(illumination_shader_.position());
   }
 }
 
-void Renderer::ComputeIllumination() {
+void Renderer::ComputeIllumination(const Stage& stage) {
   glBindFramebuffer(GL_FRAMEBUFFER, lighting_buffer_.frame_buffer().id());
   glClear(GL_COLOR_BUFFER_BIT);
   glUseProgram(occlusion_detector_.program().id());
   glUniform1i(occlusion_detector_.depth_map(), 0);
   glUniform1i(occlusion_detector_.noise(), 1);
+  auto& size = stage.size();
+  glUniform3f(occlusion_detector_.viewing_volume(), size.width(), size.height(),
+              stage.viewing_volume().depth());
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, scene_buffer_.depth().id());
   glActiveTexture(GL_TEXTURE1);

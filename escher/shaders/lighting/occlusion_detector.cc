@@ -21,13 +21,10 @@ constexpr char g_fragment_shader[] = R"GLSL(
   precision mediump float;
   uniform sampler2D u_depth_map;
   uniform sampler2D u_noise;
+  uniform vec3 u_viewing_volume;
   varying vec2 fragment_uv;
 
   const float kPi = 3.14159265359;
-
-  // TODO(abarth): Provide this values as uniform inputs to the shader.
-  const vec2 view_size = vec2(360.0, 640.0);
-  const float scene_depth = -26.0;
 
   // Must match header.
   const int kNoiseSize = 5;
@@ -69,9 +66,9 @@ constexpr char g_fragment_shader[] = R"GLSL(
     float phi = polar.y;
     float radius = alpha * kSampleHemisphereRadius;
 
-    vec2 tap_delta_uv = radius * sin(phi) * vec2(cos(theta), sin(theta)) / view_size;
+    vec2 tap_delta_uv = radius * sin(phi) * vec2(cos(theta), sin(theta)) / u_viewing_volume.xy;
     float tap_depth_uv = texture2D(u_depth_map, fragment_uv + tap_delta_uv).r;
-    float tap_z = tap_depth_uv * scene_depth;
+    float tap_z = tap_depth_uv * -u_viewing_volume.z;
 
     float z = fragment_z + radius * abs(cos(phi));
     return float(z > tap_z);
@@ -86,9 +83,9 @@ constexpr char g_fragment_shader[] = R"GLSL(
     float phi = polar.y;
     float radius = alpha * kSampleHemisphereRadius;
 
-    vec2 tap_delta_uv = radius * sin(phi) * vec2(cos(theta), sin(theta)) / view_size;
+    vec2 tap_delta_uv = radius * sin(phi) * vec2(cos(theta), sin(theta)) / u_viewing_volume.xy;
     float tap_depth_uv = texture2D(u_depth_map, fragment_uv + tap_delta_uv).r;
-    float tap_z = tap_depth_uv * scene_depth;
+    float tap_z = tap_depth_uv * -u_viewing_volume.z;
 
     float z = fragment_z + radius * abs(cos(phi));
     return float(z > tap_z);
@@ -98,7 +95,7 @@ constexpr char g_fragment_shader[] = R"GLSL(
     vec2 seed = texture2D(u_noise, gl_FragCoord.xy / float(kNoiseSize)).rg;
 
     float fragment_depth_uv = texture2D(u_depth_map, fragment_uv).r;
-    float fragment_z = fragment_depth_uv * scene_depth;
+    float fragment_z = fragment_depth_uv * -u_viewing_volume.z;
 
     float L = 0.0;
     for (int i = 0; i < kTapCount; ++i) {
@@ -127,6 +124,8 @@ bool OcclusionDetector::Compile() {
   ESCHER_DCHECK(depth_map_ != -1);
   noise_ = glGetUniformLocation(program_.id(), "u_noise");
   ESCHER_DCHECK(noise_ != -1);
+  viewing_volume_ = glGetUniformLocation(program_.id(), "u_viewing_volume");
+  ESCHER_DCHECK(viewing_volume_ != -1);
   return true;
 }
 

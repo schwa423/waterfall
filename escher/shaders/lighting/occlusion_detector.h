@@ -21,7 +21,7 @@ class OcclusionDetector {
   // Uniforms
   GLint depth_map() const { return depth_map_; }
   GLint noise() const { return noise_; }
-  // TODO(abarth): Add view size information.
+  GLint viewing_volume() const { return viewing_volume_; }
 
   // Attributes
   GLint position() const { return position_; }
@@ -34,6 +34,7 @@ class OcclusionDetector {
 
   GLint depth_map_ = 0;
   GLint noise_ = 0;
+  GLint viewing_volume_ = 0;
   GLint position_ = 0;
 
   ESCHER_DISALLOW_COPY_AND_ASSIGN(OcclusionDetector);

@@ -35,7 +35,7 @@ class Renderer {
   void DrawModelWithSolidColorShader(const Model& model,
                                      const glm::mat4& matrix);
 
-  void ComputeIllumination();
+  void ComputeIllumination(const Stage& stage);
   void DrawFullFrameQuad(GLint position);
 
   SizeI size_;
