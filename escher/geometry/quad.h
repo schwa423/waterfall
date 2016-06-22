@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
 #include <glm/glm.hpp>
 #include <vector>
 
@@ -22,8 +20,8 @@ class Quad {
     return reinterpret_cast<const float*>(this);
   }
 
-  static const GLushort* GetIndices();
-  static GLsizei GetIndexCount();
+  static const unsigned short* GetIndices();
+  static int GetIndexCount();
 
  private:
   glm::vec3 p[4] = {};

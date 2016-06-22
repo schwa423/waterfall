@@ -9,7 +9,7 @@
 namespace escher {
 namespace {
 
-constexpr GLushort g_indices[] = {
+constexpr unsigned short g_indices[] = {
     0, 1, 2, 0, 2, 3,
 };
 
@@ -31,11 +31,11 @@ Quad Quad::CreateFromRect(glm::vec2 position, glm::vec2 size, float z) {
               glm::vec3(position.x, position.y, z));
 }
 
-const GLushort* Quad::GetIndices() {
+const unsigned short* Quad::GetIndices() {
   return g_indices;
 }
 
-GLsizei Quad::GetIndexCount() {
+int Quad::GetIndexCount() {
   return arraysize(g_indices);
 }
 

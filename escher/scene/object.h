@@ -29,8 +29,8 @@ class Object {
   const Material* material() const { return material_; }
 
   const float* positions() const { return quad_.data(); }
-  const GLushort* indices() const { return Quad::GetIndices(); }
-  GLsizei index_count() const { return Quad::GetIndexCount(); }
+  const unsigned short* indices() const { return Quad::GetIndices(); }
+  int index_count() const { return Quad::GetIndexCount(); }
 
  private:
   explicit Object(const Material* material);

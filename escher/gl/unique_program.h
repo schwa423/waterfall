@@ -10,6 +10,9 @@
 
 namespace escher {
 
+typedef UniqueObject<glDeleteShader> UniqueShader;
+UniqueShader MakeUniqueShader(GLenum type, const std::string& source);
+
 typedef UniqueObject<glDeleteProgram> UniqueProgram;
 UniqueProgram MakeUniqueProgram(const std::string& vertex_shader,
                                 const std::string& fragment_shader);

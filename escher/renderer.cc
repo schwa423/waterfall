@@ -4,13 +4,11 @@
 
 #include "escher/renderer.h"
 
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
 #include <iostream>
 #include <math.h>
 #include <utility>
 
-#include "escher/gl/extensions.h"
+#include "escher/gl/bindings.h"
 #include "escher/textures/noise_texture.h"
 
 namespace escher {
@@ -28,8 +26,6 @@ Renderer::Renderer()
 Renderer::~Renderer() {}
 
 bool Renderer::Init() {
-  InitGLExtensions();
-
   if (!blit_shader_.Compile() ||
       !illumination_shader_.Compile() || !reconstruction_filter_.Compile() ||
       !occlusion_detector_.Compile() || !solid_color_shader_.Compile())

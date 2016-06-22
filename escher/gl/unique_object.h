@@ -4,11 +4,10 @@
 
 #pragma once
 
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
 #include <utility>
 
 #include "escher/base/macros.h"
+#include "escher/gl/bindings.h"
 
 namespace escher {
 
