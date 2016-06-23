@@ -53,7 +53,7 @@ constexpr char g_fragment_shader[] = R"GLSL(
 #if MASK == MASK_CIRCULAR
   varying vec2 v_mask_uv;
   bool mask() {
-    return v_mask_uv.x * v_mask_uv.x + v_mask_uv.y * v_mask_uv.y <= 1.0;
+    return dot(v_mask_uv, v_mask_uv) <= 1.0;
   }
 #else
   bool mask() { return true; }
