@@ -66,7 +66,7 @@ void Renderer::Render(const Stage& stage, const Model& model) {
 
   ComputeIllumination(stage);
 
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  glBindFramebuffer(GL_FRAMEBUFFER, front_frame_buffer_id_);
   glClear(GL_COLOR_BUFFER_BIT);
   if (!kIlluminateScene) {
     Blit(lighting_buffer_.color().id());

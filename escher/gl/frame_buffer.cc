@@ -21,6 +21,7 @@ bool FrameBuffer::SetSize(const SizeI& size) {
 
   if (!frame_buffer_)
     frame_buffer_ = MakeUniqueFrameBuffer();
+  ESCHER_DCHECK(frame_buffer_);
 
   glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer_.id());
 
@@ -41,6 +42,8 @@ bool FrameBuffer::SetSize(const SizeI& size) {
 
 UniqueTexture FrameBuffer::SetColorTexture(UniqueTexture color) {
   ESCHER_DCHECK(has_color_);
+  ESCHER_DCHECK(frame_buffer_);
+  glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer_.id());
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
                          color.id(), 0);
   ESCHER_DCHECK(CheckStatusIfDebug());
@@ -52,7 +55,8 @@ bool FrameBuffer::CheckStatusIfDebug() {
 #ifndef NDEBUG
   GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
   if (status != GL_FRAMEBUFFER_COMPLETE) {
-    std::cerr << "error: frame buffer: " << std::hex << status << std::endl;
+    std::cerr << "error: frame buffer: " << frame_buffer_.id() << ": 0x"
+              << std::hex << status << std::endl;
     return false;
   }
   return true;

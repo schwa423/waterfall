@@ -27,6 +27,12 @@ class Renderer {
   ~Renderer();
 
   bool Init();
+
+  GLuint front_frame_buffer_id() const { return front_frame_buffer_id_; }
+  void set_front_frame_buffer_id(GLuint value) {
+    front_frame_buffer_id_ = value;
+  }
+
   void Render(const Stage& stage, const Model& model);
 
  private:
@@ -37,6 +43,7 @@ class Renderer {
   void ComputeIllumination(const Stage& stage);
   void DrawFullFrameQuad(GLint position);
 
+  GLuint front_frame_buffer_id_ = 0;
   SizeI size_;
   FrameBuffer scene_buffer_;
   FrameBuffer lighting_buffer_;
