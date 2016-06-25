@@ -62,7 +62,7 @@ void Renderer::Render(const Stage& stage, const Model& model) {
   glm::mat4 matrix = stage.viewing_volume().GetProjectionMatrix();
   glViewport(0, 0, size_.width(), size_.height());
 
-  model_renderer_.DrawModel(model, matrix, scene_buffer_.frame_buffer());
+  model_renderer_.DrawModel(stage, model, matrix, scene_buffer_.frame_buffer());
 
   ComputeIllumination(stage);
 

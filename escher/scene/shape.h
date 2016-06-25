@@ -42,7 +42,7 @@ class Shape {
   }
 
  private:
-  Shape(Type type);
+  explicit Shape(Type type);
 
   Type type_;
   glm::vec2 position_;

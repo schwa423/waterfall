@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "escher/scene/displacement.h"
 #include "escher/scene/material.h"
 #include "escher/shaders/material/modifier.h"
 
@@ -15,13 +16,16 @@ namespace escher {
 struct MaterialShaderDescriptor {
   struct Hash;
 
-  MaterialShaderDescriptor(BindingType color_binding_type, Modifier::Mask mask);
+  MaterialShaderDescriptor(BindingType color_binding_type,
+                           Displacement::Type displacement,
+                           Modifier::Mask mask);
   ~MaterialShaderDescriptor();
 
   bool operator==(const MaterialShaderDescriptor& other) const;
   size_t hash() const;
 
   BindingType color_binding_type;
+  Displacement::Type displacement;
   Modifier::Mask mask;
 };
 

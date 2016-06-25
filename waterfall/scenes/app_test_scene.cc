@@ -20,6 +20,8 @@ AppTestScene::AppTestScene() {
       escher::MakeConstantBinding(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)));
   card_material_.set_color(
       escher::MakeConstantBinding(glm::vec4(1.0f, 1.0f, 0.8f, 1.0f)));
+  card_material_.set_displacement(escher::Displacement::MakeWave(
+      glm::vec2(0.5f, 0.0f), glm::vec2(0.75f, 0.0f), 10.0f));
   fab_material_.set_color(
       escher::MakeConstantBinding(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
   green_material_.set_color(

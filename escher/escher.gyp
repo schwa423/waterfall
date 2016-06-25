@@ -45,6 +45,8 @@
       'scene/binding.h',
       'scene/directional_light.cc',
       'scene/directional_light.h',
+      'scene/displacement.cc',
+      'scene/displacement.h',
       'scene/material.cc',
       'scene/material.h',
       'scene/model.cc',

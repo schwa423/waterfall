@@ -14,7 +14,8 @@ ModelRenderer::ModelRenderer() {}
 
 ModelRenderer::~ModelRenderer() {}
 
-void ModelRenderer::DrawModel(const Model& model,
+void ModelRenderer::DrawModel(const Stage& stage,
+                              const Model& model,
                               const glm::mat4& matrix,
                               const UniqueFrameBuffer& frame_buffer) {
   glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer.id());
@@ -28,7 +29,7 @@ void ModelRenderer::DrawModel(const Model& model,
   // also need to use multiple rendering passes for certain blending effects.
   glDepthFunc(GL_LEQUAL);
 
-  DrawContext context(*this, matrix);
+  DrawContext context(*this, stage, matrix);
 
   for (const auto& object : model.objects())
     context.DrawObject(object);
@@ -39,8 +40,9 @@ void ModelRenderer::DrawModel(const Model& model,
 }
 
 ModelRenderer::DrawContext::DrawContext(ModelRenderer& renderer,
+                                        const Stage& stage,
                                         const glm::mat4& matrix)
-    : renderer_(renderer), matrix_(matrix) {}
+    : renderer_(renderer), stage_(stage), matrix_(matrix) {}
 
 ModelRenderer::DrawContext::~DrawContext() {}
 
@@ -79,8 +81,8 @@ void ModelRenderer::DrawContext::DrawCircle(const Object& object) {
   glVertexAttribPointer(shader_->position(), 3, GL_FLOAT, GL_FALSE, 0,
                         quad.data());
 
-  GLfloat mask[] = {-1, -1, -1, 1, 1, 1, 1, -1};
-  glVertexAttribPointer(shader_->mask_uv(), 2, GL_FLOAT, GL_FALSE, 0, mask);
+  constexpr GLfloat uv[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
+  glVertexAttribPointer(shader_->uv(), 2, GL_FLOAT, GL_FALSE, 0, uv);
 
   glDrawElements(GL_TRIANGLES, Quad::GetIndexCount(), GL_UNSIGNED_SHORT,
                  Quad::GetIndices());
@@ -96,7 +98,7 @@ void ModelRenderer::DrawContext::BindMaterial(const Material& material,
   }
 
   UseMaterialShader(shader);
-  shader->Bind(material, modifier);
+  shader->Bind(stage_, material, modifier);
 }
 
 void ModelRenderer::DrawContext::UseMaterialShader(

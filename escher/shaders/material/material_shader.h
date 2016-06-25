@@ -9,6 +9,7 @@
 #include "escher/base/macros.h"
 #include "escher/gl/unique_program.h"
 #include "escher/scene/material.h"
+#include "escher/scene/stage.h"
 #include "escher/shaders/material/material_shader_descriptor.h"
 #include "escher/shaders/material/modifier.h"
 
@@ -22,7 +23,7 @@ class MaterialShader {
 
   // Attributes
   GLint position() const { return position_; }
-  GLint mask_uv() const { return mask_uv_; }
+  GLint uv() const { return uv_; }
 
   // Prepares the program for use before drawing any number of objects.
   // Must be called whenever switching between shaders and before binding
@@ -30,22 +31,31 @@ class MaterialShader {
   void Use(const glm::mat4& matrix) const;
 
   // Binds the parameters of a material to the shader.
-  void Bind(const Material& material, const Modifier& modifier) const;
+  void Bind(const Stage& stage,
+            const Material& material,
+            const Modifier& modifier) const;
 
  private:
   friend class MaterialShaderFactory;
 
   explicit MaterialShader(const MaterialShaderDescriptor& descriptor);
+  bool NeedsUV() const;
   bool Compile();
   std::string GeneratePrologue();
 
   const MaterialShaderDescriptor descriptor_;
 
   UniqueProgram program_;
-  GLint matrix_ = 0;
-  GLint color_ = 0;
+
+  // Uniforms.
+  GLint matrix_ = -1;
+  GLint color_ = -1;
+  GLint displacement_params0_ = -1;
+  GLint displacement_params1_ = -1;
+
+  // Attributes.
   GLint position_ = 0;
-  GLint mask_uv_ = 0;
+  GLint uv_ = -1;
 
   ESCHER_DISALLOW_COPY_AND_ASSIGN(MaterialShader);
 };

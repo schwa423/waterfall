@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 
 #include "escher/scene/binding.h"
+#include "escher/scene/displacement.h"
 
 namespace escher {
 
@@ -20,10 +21,21 @@ class Material {
   void set_color(const Binding<glm::vec4>& color) { color_ = color; }
   const Binding<glm::vec4>& color() const { return color_; }
 
-  // TODO(jeffbrown): Displacement, normals.
+  enum class DisplacementType {
+    kNone,
+    kWave,
+  };
+
+  void set_displacement(const Displacement& displacement) {
+    displacement_ = displacement;
+  }
+  const Displacement& displacement() const { return displacement_; }
+
+  // TODO(jeffbrown): Normals.
 
  private:
   Binding<glm::vec4> color_;
+  Displacement displacement_;
 };
 
 }  // namespace escher

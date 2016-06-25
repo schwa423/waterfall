@@ -4,6 +4,8 @@
 
 #include "escher/shaders/material/material_shader.h"
 
+#include <math.h>
+
 #include "escher/shaders/glsl_generator.h"
 
 namespace escher {
@@ -14,30 +16,45 @@ constexpr char g_decls[] = R"GLSL(
   #define BINDING_CONSTANT 1
   #define MASK_NONE 0
   #define MASK_CIRCULAR 1
+  #define DISPLACEMENT_NONE 0
+  #define DISPLACEMENT_WAVE 1
+
+  #define HAS_MASK (MASK != MASK_NONE)
+  #define HAS_DISPLACEMENT (DISPLACEMENT != DISPLACEMENT_NONE)
+
+  #define NEEDS_UV (HAS_MASK || HAS_DISPLACEMENT)
+  #define NEEDS_DEPTH HAS_DISPLACEMENT
 )GLSL";
 
 constexpr char g_vertex_shader[] = R"GLSL(
   attribute vec3 a_position;
   uniform mat4 u_matrix;
 
-#if MASK == MASK_CIRCULAR
-  attribute vec2 a_mask_uv;
-  varying vec2 v_mask_uv;
-  void mask() {
-    v_mask_uv = a_mask_uv;
-  }
-#else
-  void mask() {}
+#if NEEDS_UV
+  attribute vec2 a_uv;
+  varying vec2 v_uv;
 #endif
 
   void main() {
     gl_Position = u_matrix * vec4(a_position, 1.0);
-    mask();
+#if NEEDS_UV
+    v_uv = a_uv;
+#endif
   }
 )GLSL";
 
 constexpr char g_fragment_shader[] = R"GLSL(
+#if NEEDS_DEPTH
+  #extension GL_EXT_frag_depth : require
+#endif
+
   precision mediump float;
+
+  const float kPi = 3.14159265359;
+
+#if NEEDS_UV
+  varying vec2 v_uv;
+#endif
 
 #if COLOR_BINDING == BINDING_NONE
   vec4 color() {
@@ -51,17 +68,44 @@ constexpr char g_fragment_shader[] = R"GLSL(
 #endif
 
 #if MASK == MASK_CIRCULAR
-  varying vec2 v_mask_uv;
-  bool mask() {
-    return dot(v_mask_uv, v_mask_uv) <= 1.0;
+  void applyMask() {
+    vec2 r = 2.0 * v_uv - 1.0;
+    if (dot(r, r) >= 1.0)
+      discard; // TODO(jeffbrown): inefficient!
   }
-#else
-  bool mask() { return true; }
+#endif
+
+#if DISPLACEMENT == DISPLACEMENT_WAVE
+  uniform vec4 u_displacement_params0;
+  uniform vec4 u_displacement_params1;
+
+  // TODO(abarth): Compute this value analytically.
+  const float kDisplacementShadow = 0.08;
+
+  void applyDisplacement() {
+    vec2 peak = u_displacement_params0.xy;
+    vec2 unit_wavevector = u_displacement_params0.zw;
+    float half_wavenumber = u_displacement_params1.x;
+    float amplitude = u_displacement_params1.y;
+
+    float theta = clamp(dot(v_uv - peak, unit_wavevector) * half_wavenumber, -kPi, kPi);
+
+    // TODO(abarth): The shadow should vary with the projection of the
+    // unit_wavevector onto the key light direction.
+    float shadow = kDisplacementShadow * abs(sin(theta));
+    gl_FragColor.rgb = (1.0 - shadow) * gl_FragColor.rgb;
+    gl_FragDepthEXT = gl_FragCoord.z + amplitude * (1.0 + cos(theta));
+  }
 #endif
 
   void main() {
-    if (!mask()) discard; // FIXME(jeffbrown): inefficient!
+#if HAS_MASK
+    applyMask();
+#endif
     gl_FragColor = color();
+#if HAS_DISPLACEMENT
+    applyDisplacement();
+#endif
   }
 )GLSL";
 
@@ -89,6 +133,18 @@ void DefineMaskSymbol(GLSLGenerator& generator, Modifier::Mask mask) {
   }
 }
 
+void DefineDislacementSymbol(GLSLGenerator& generator,
+                             Displacement::Type displacement) {
+  switch (displacement) {
+    case Displacement::Type::kNone:
+      generator.DefineSymbol("DISPLACEMENT", "DISPLACEMENT_NONE");
+      break;
+    case Displacement::Type::kWave:
+      generator.DefineSymbol("DISPLACEMENT", "DISPLACEMENT_WAVE");
+      break;
+  }
+}
+
 }  // namespace
 
 MaterialShader::MaterialShader(const MaterialShaderDescriptor& descriptor)
@@ -100,16 +156,37 @@ void MaterialShader::Use(const glm::mat4& matrix) const {
   glUseProgram(program_.id());
   glEnableVertexAttribArray(position_);
   if (descriptor_.mask == Modifier::Mask::kCircular)
-    glEnableVertexAttribArray(mask_uv_);
+    glEnableVertexAttribArray(uv_);
   glUniformMatrix4fv(matrix_, 1, GL_FALSE, &matrix[0][0]);
 }
 
-void MaterialShader::Bind(const Material& material,
+void MaterialShader::Bind(const Stage& stage,
+                          const Material& material,
                           const Modifier& modifier) const {
   if (descriptor_.color_binding_type == BindingType::kConstant) {
     const glm::vec4& color = material.color().constant_value();
     glUniform4fv(color_, 1, &color[0]);
   }
+
+  if (material.displacement().type() == Displacement::Type::kWave) {
+    auto& displacement = material.displacement();
+    glm::vec2 wavevector = displacement.end() - displacement.start();
+    glm::vec2 peak = displacement.start() + wavevector / 2.0f;
+    float wavelength = glm::length(wavevector);
+    glm::vec2 unit_wavevector = wavevector / wavelength;
+    float half_wavenumber = M_PI / wavelength;
+    float amplitude =
+        0.5f * displacement.max() / -stage.viewing_volume().depth();
+
+    glUniform4f(displacement_params0_, peak.x, peak.y, unit_wavevector.x,
+                unit_wavevector.y);
+    glUniform4f(displacement_params1_, half_wavenumber, amplitude, 0.0f, 0.0f);
+  }
+}
+
+bool MaterialShader::NeedsUV() const {
+  return descriptor_.displacement != Displacement::Type::kNone ||
+         descriptor_.mask != Modifier::Mask::kNone;
 }
 
 bool MaterialShader::Compile() {
@@ -138,9 +215,18 @@ bool MaterialShader::Compile() {
     ESCHER_DCHECK(color_ != -1);
   }
 
-  if (descriptor_.mask == Modifier::Mask::kCircular) {
-    mask_uv_ = glGetAttribLocation(program_.id(), "a_mask_uv");
-    ESCHER_DCHECK(mask_uv_ != -1);
+  if (descriptor_.displacement != Displacement::Type::kNone) {
+    displacement_params0_ =
+        glGetUniformLocation(program_.id(), "u_displacement_params0");
+    ESCHER_DCHECK(displacement_params0_ != -1);
+    displacement_params1_ =
+        glGetUniformLocation(program_.id(), "u_displacement_params1");
+    ESCHER_DCHECK(displacement_params1_ != -1);
+  }
+
+  if (NeedsUV()) {
+    uv_ = glGetAttribLocation(program_.id(), "a_uv");
+    ESCHER_DCHECK(uv_ != -1);
   }
   return true;
 }
@@ -149,6 +235,7 @@ std::string MaterialShader::GeneratePrologue() {
   GLSLGenerator generator;
   DefineBindingSymbol(generator, "COLOR_BINDING",
                       descriptor_.color_binding_type);
+  DefineDislacementSymbol(generator, descriptor_.displacement);
   DefineMaskSymbol(generator, descriptor_.mask);
   return generator.GenerateCode();
 }

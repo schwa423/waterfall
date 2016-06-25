@@ -21,6 +21,7 @@
 		974778AF1D1A599700BE78FE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 974778AD1D1A599700BE78FE /* Main.storyboard */; };
 		974778B11D1A599700BE78FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 974778B01D1A599700BE78FE /* Assets.xcassets */; };
 		974778B41D1A599700BE78FE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 974778B21D1A599700BE78FE /* LaunchScreen.storyboard */; };
+		978372D21D1D9AFE00B0AB77 /* displacement.cc in Sources */ = {isa = PBXBuildFile; fileRef = 978372D01D1D9AFE00B0AB77 /* displacement.cc */; };
 		97E7338E1D1A5BFC00F62181 /* time.cc in Sources */ = {isa = PBXBuildFile; fileRef = 97E7338C1D1A5BFC00F62181 /* time.cc */; };
 		97E733941D1A5C7600F62181 /* quad.cc in Sources */ = {isa = PBXBuildFile; fileRef = 97E733901D1A5C7600F62181 /* quad.cc */; };
 		97E733951D1A5C7600F62181 /* size_i.cc in Sources */ = {isa = PBXBuildFile; fileRef = 97E733921D1A5C7600F62181 /* size_i.cc */; };
@@ -74,6 +75,8 @@
 		974778B01D1A599700BE78FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		974778B31D1A599700BE78FE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		974778B51D1A599700BE78FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		978372D01D1D9AFE00B0AB77 /* displacement.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = displacement.cc; sourceTree = "<group>"; };
+		978372D11D1D9AFE00B0AB77 /* displacement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = displacement.h; sourceTree = "<group>"; };
 		97E7338A1D1A5BFC00F62181 /* arraysize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = arraysize.h; sourceTree = "<group>"; };
 		97E7338B1D1A5BFC00F62181 /* macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macros.h; sourceTree = "<group>"; };
 		97E7338C1D1A5BFC00F62181 /* time.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = time.cc; sourceTree = "<group>"; };
@@ -272,6 +275,8 @@
 				97E733A91D1A5C9600F62181 /* ambient_light.h */,
 				97E733AA1D1A5C9600F62181 /* directional_light.cc */,
 				97E733AB1D1A5C9600F62181 /* directional_light.h */,
+				978372D01D1D9AFE00B0AB77 /* displacement.cc */,
+				978372D11D1D9AFE00B0AB77 /* displacement.h */,
 				97E733AC1D1A5C9600F62181 /* material.cc */,
 				97E733AD1D1A5C9600F62181 /* material.h */,
 				97E733AE1D1A5C9600F62181 /* model.cc */,
@@ -442,6 +447,7 @@
 				97E733CA1D1A5C9600F62181 /* stage.cc in Sources */,
 				97E733A51D1A5C7F00F62181 /* unique_program.cc in Sources */,
 				97254BE61D1B92B3002980D5 /* unique_shader.cc in Sources */,
+				978372D21D1D9AFE00B0AB77 /* displacement.cc in Sources */,
 				974778A21D1A599700BE78FE /* main.m in Sources */,
 				97254BF91D1B92ED002980D5 /* modifier.cc in Sources */,
 				97E733A31D1A5C7F00F62181 /* frame_buffer.cc in Sources */,
