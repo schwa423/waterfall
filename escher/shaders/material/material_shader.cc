@@ -87,8 +87,10 @@ constexpr char g_fragment_shader[] = R"GLSL(
     vec2 unit_wavevector = u_displacement_params0.zw;
     float half_wavenumber = u_displacement_params1.x;
     float amplitude = u_displacement_params1.y;
+    float theta_min = u_displacement_params1.z;
+    float theta_max = u_displacement_params1.w;
 
-    float theta = clamp(dot(v_uv - peak, unit_wavevector) * half_wavenumber, -kPi, kPi);
+    float theta = clamp(dot(v_uv - peak, unit_wavevector) * half_wavenumber, theta_min, theta_max);
 
     // TODO(abarth): The shadow should vary with the projection of the
     // unit_wavevector onto the key light direction.
@@ -180,7 +182,8 @@ void MaterialShader::Bind(const Stage& stage,
 
     glUniform4f(displacement_params0_, peak.x, peak.y, unit_wavevector.x,
                 unit_wavevector.y);
-    glUniform4f(displacement_params1_, half_wavenumber, amplitude, 0.0f, 0.0f);
+    glUniform4f(displacement_params1_, half_wavenumber, amplitude,
+                displacement.theta_min(), displacement.theta_max());
   }
 }
 

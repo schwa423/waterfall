@@ -5,6 +5,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <math.h>
 
 #include "escher/scene/binding.h"
 
@@ -24,7 +25,9 @@ class Displacement {
 
   static Displacement MakeWave(const glm::vec2& start,
                                const glm::vec2& end,
-                               float max);
+                               float max,
+                               float theta_min = -M_PI,
+                               float theta_max = M_PI);
 
   Type type() const { return type_; }
   float max() const { return max_; }
@@ -32,11 +35,15 @@ class Displacement {
   // For Type::kWave.
   glm::vec2 start() const { return glm::vec2(parameters_.x, parameters_.y); }
   glm::vec2 end() const { return glm::vec2(parameters_.z, parameters_.w); }
+  float theta_min() const { return theta_min_; }
+  float theta_max() const { return theta_max_; }
 
  private:
   Type type_ = Type::kNone;
   glm::vec4 parameters_;
-  float max_ = 0.0;
+  float max_ = 0.0f;
+  float theta_min_ = 0.0f;
+  float theta_max_ = 0.0f;
 };
 
 }  // namespace escher
