@@ -69,8 +69,9 @@ static const bool kDrawShadowTestScene = false;
 - (void)update {
   CGFloat contentScaleFactor = self.view.contentScaleFactor;
   CGSize size = self.view.bounds.size;
-  stage_.SetSize(escher::SizeI(size.width * contentScaleFactor,
-                               size.height * contentScaleFactor));
+  stage_.Resize(escher::SizeI(size.width * contentScaleFactor,
+                              size.height * contentScaleFactor),
+                contentScaleFactor);
 }
 
 - (void)glkView:(GLKView*)view drawInRect:(CGRect)rect {
@@ -82,8 +83,8 @@ static const bool kDrawShadowTestScene = false;
   }
 
   if (kDrawShadowTestScene)
-    renderer_->Render(stage_, shadow_test_scene_.GetModel(stage_.size()));
-  renderer_->Render(stage_, app_test_scene_.GetModel(stage_.size(), focus_));
+    renderer_->Render(stage_, shadow_test_scene_.GetModel(stage_.viewing_volume()));
+  renderer_->Render(stage_, app_test_scene_.GetModel(stage_.viewing_volume(), focus_));
 }
 
 - (void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event {

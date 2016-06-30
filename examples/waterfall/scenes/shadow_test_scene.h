@@ -5,15 +5,15 @@
 #pragma once
 
 #include "escher/base/macros.h"
-#include "escher/geometry/size_i.h"
 #include "escher/scene/model.h"
+#include "escher/scene/viewing_volume.h"
 
 class ShadowTestScene {
  public:
   ShadowTestScene();
   ~ShadowTestScene();
 
-  escher::Model GetModel(const escher::SizeI& size);
+  escher::Model GetModel(const escher::ViewingVolume& volume);
 
  private:
   escher::Material card_material_;

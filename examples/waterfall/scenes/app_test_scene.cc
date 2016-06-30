@@ -28,25 +28,27 @@ AppTestScene::AppTestScene() {
 
 AppTestScene::~AppTestScene() {}
 
-escher::Model AppTestScene::GetModel(const escher::SizeI& size,
+escher::Model AppTestScene::GetModel(const escher::ViewingVolume& volume,
                                      const glm::vec2& focus) {
   std::vector<escher::Object> objects;
 
   // canvas
   objects.emplace_back(
-      escher::Shape::CreateRect(glm::vec2(0.0f, 0.0f), size.AsVec2(), 0.0f),
+      escher::Shape::CreateRect(glm::vec2(0.0f, 0.0f),
+                                glm::vec2(volume.width(), volume.height()),
+                                0.0f),
       &canvas_material_);
 
   // app bar
   objects.emplace_back(
       escher::Shape::CreateRect(glm::vec2(0.0f, 0.0f),
-                                glm::vec2(size.width(), 56.0f), 4.0f),
+                                glm::vec2(volume.width(), 56.0f), 4.0f),
       &app_bar_material_);
 
   // card
   objects.emplace_back(
       escher::Shape::CreateRect(glm::vec2(0.0f, 200.0f),
-                                glm::vec2(size.width(), 120.0f), 2.0f),
+                                glm::vec2(volume.width(), 120.0f), 2.0f),
       &card_material_);
 
   // left eye

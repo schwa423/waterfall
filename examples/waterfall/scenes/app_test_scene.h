@@ -5,15 +5,16 @@
 #pragma once
 
 #include "escher/base/macros.h"
-#include "escher/geometry/size_i.h"
 #include "escher/scene/model.h"
+#include "escher/scene/viewing_volume.h"
 
 class AppTestScene {
  public:
   AppTestScene();
   ~AppTestScene();
 
-  escher::Model GetModel(const escher::SizeI& size, const glm::vec2& focus);
+  escher::Model GetModel(const escher::ViewingVolume& volume,
+                         const glm::vec2& focus);
 
  private:
   escher::Material app_bar_material_;

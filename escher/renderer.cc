@@ -56,8 +56,8 @@ void Renderer::ResizeBuffers(const SizeI& size) {
 }
 
 void Renderer::Render(const Stage& stage, const Model& model) {
-  if (!size_.Equals(stage.size()))
-    ResizeBuffers(stage.size());
+  if (!size_.Equals(stage.physical_size()))
+    ResizeBuffers(stage.physical_size());
 
   glm::mat4 matrix = stage.viewing_volume().GetProjectionMatrix();
   glViewport(0, 0, size_.width(), size_.height());
@@ -89,9 +89,9 @@ void Renderer::ComputeIllumination(const Stage& stage) {
   glUseProgram(occlusion_detector_.program().id());
   glUniform1i(occlusion_detector_.depth_map(), 0);
   glUniform1i(occlusion_detector_.noise(), 1);
-  auto& size = stage.size();
-  glUniform3f(occlusion_detector_.viewing_volume(), size.width(), size.height(),
-              stage.viewing_volume().depth());
+  auto& viewing_volume = stage.viewing_volume();
+  glUniform3f(occlusion_detector_.viewing_volume(), viewing_volume.width(),
+              viewing_volume.height(), viewing_volume.depth());
   auto& key_light = stage.key_light();
   glUniform4f(occlusion_detector_.key_light(), key_light.direction().x,
               key_light.direction().y, key_light.dispersion(),
