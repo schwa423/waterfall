@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "waterfall/scenes/shadow_test_scene.h"
+#include "examples/waterfall/scenes/shadow_test_scene.h"
 
 #include "escher/base/arraysize.h"
 #include "escher/renderer.h"

@@ -7,9 +7,9 @@
 #include <memory>
 
 #include "escher/renderer.h"
-#include "waterfall/scenes/app_test_scene.h"
-#include "waterfall/scenes/material_stage.h"
-#include "waterfall/scenes/shadow_test_scene.h"
+#include "examples/waterfall/scenes/app_test_scene.h"
+#include "examples/waterfall/scenes/material_stage.h"
+#include "examples/waterfall/scenes/shadow_test_scene.h"
 
 static const bool kDrawShadowTestScene = false;
 
