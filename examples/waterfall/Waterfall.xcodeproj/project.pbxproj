@@ -47,6 +47,8 @@
 		97ED1BFB1D24C96F0080360C /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 97ED1BF31D24C96F0080360C /* Info.plist */; };
 		97ED1BFC1D24C96F0080360C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 97ED1BF41D24C96F0080360C /* main.m */; };
 		97ED1BFD1D24C96F0080360C /* WaterfallViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97ED1BF61D24C96F0080360C /* WaterfallViewController.mm */; };
+		97ED1C041D24FC090080360C /* texture_cache.cc in Sources */ = {isa = PBXBuildFile; fileRef = 97ED1BFF1D24FC090080360C /* texture_cache.cc */; };
+		97ED1C051D24FC090080360C /* texture.cc in Sources */ = {isa = PBXBuildFile; fileRef = 97ED1C021D24FC090080360C /* texture.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -128,6 +130,12 @@
 		97ED1BF41D24C96F0080360C /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		97ED1BF51D24C96F0080360C /* WaterfallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaterfallViewController.h; sourceTree = "<group>"; };
 		97ED1BF61D24C96F0080360C /* WaterfallViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WaterfallViewController.mm; sourceTree = "<group>"; };
+		97ED1BFE1D24FC090080360C /* bindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bindings.h; sourceTree = "<group>"; };
+		97ED1BFF1D24FC090080360C /* texture_cache.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = texture_cache.cc; sourceTree = "<group>"; };
+		97ED1C001D24FC090080360C /* texture_cache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = texture_cache.h; sourceTree = "<group>"; };
+		97ED1C011D24FC090080360C /* texture_descriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = texture_descriptor.h; sourceTree = "<group>"; };
+		97ED1C021D24FC090080360C /* texture.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = texture.cc; sourceTree = "<group>"; };
+		97ED1C031D24FC090080360C /* texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = texture.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -228,6 +236,12 @@
 		97E733961D1A5C7F00F62181 /* gl */ = {
 			isa = PBXGroup;
 			children = (
+				97ED1BFE1D24FC090080360C /* bindings.h */,
+				97ED1BFF1D24FC090080360C /* texture_cache.cc */,
+				97ED1C001D24FC090080360C /* texture_cache.h */,
+				97ED1C011D24FC090080360C /* texture_descriptor.h */,
+				97ED1C021D24FC090080360C /* texture.cc */,
+				97ED1C031D24FC090080360C /* texture.h */,
 				97E733991D1A5C7F00F62181 /* frame_buffer.cc */,
 				97E7339A1D1A5C7F00F62181 /* frame_buffer.h */,
 				97E7339B1D1A5C7F00F62181 /* unique_frame_buffer.cc */,
@@ -441,6 +455,8 @@
 				97E733CF1D1A5C9600F62181 /* occlusion_detector.cc in Sources */,
 				97254BF81D1B92ED002980D5 /* material_shader_factory.cc in Sources */,
 				97E733CC1D1A5C9600F62181 /* blit_shader.cc in Sources */,
+				97ED1C051D24FC090080360C /* texture.cc in Sources */,
+				97ED1C041D24FC090080360C /* texture_cache.cc in Sources */,
 				97E733D11D1A5C9600F62181 /* noise_texture.cc in Sources */,
 				97E733C61D1A5C9600F62181 /* directional_light.cc in Sources */,
 				97E733CB1D1A5C9600F62181 /* viewing_volume.cc in Sources */,

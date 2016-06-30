@@ -18,7 +18,7 @@ class FrameBuffer {
   explicit FrameBuffer(GLbitfield mask);
   ~FrameBuffer();
 
-  SizeI size() const { return size_; }
+  const SizeI& size() const { return size_; }
   bool SetSize(const SizeI& size);
 
   const UniqueFrameBuffer& frame_buffer() const { return frame_buffer_; };
