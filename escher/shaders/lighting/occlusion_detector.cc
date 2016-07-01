@@ -45,7 +45,7 @@ constexpr char g_fragment_shader[] = R"GLSL(
   const float kPi = 3.14159265359;
 
   // Must match header.
-  const int kNoiseSize = 5;
+  const int kNoiseSize = 8;
 
   // The numer of screen-space samples to use in the computation.
   const int kTapCount = 8;

@@ -54,7 +54,7 @@ class MaterialShader {
   GLint displacement_params1_ = -1;
 
   // Attributes.
-  GLint position_ = 0;
+  GLint position_ = -1;
   GLint uv_ = -1;
 
   ESCHER_DISALLOW_COPY_AND_ASSIGN(MaterialShader);
