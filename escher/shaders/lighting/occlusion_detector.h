@@ -27,8 +27,8 @@ class OcclusionDetector {
   // Attributes
   GLint position() const { return position_; }
 
-  // Must match fragment shader.
-  static const int kNoiseSize = 8;
+  // Must match fragment shader and RADIUS in IlluminationReconstructionFilter.
+  static const int kNoiseSize = 5;
 
  private:
   UniqueProgram program_;

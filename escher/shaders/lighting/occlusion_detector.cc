@@ -45,7 +45,7 @@ constexpr char g_fragment_shader[] = R"GLSL(
   const float kPi = 3.14159265359;
 
   // Must match header.
-  const int kNoiseSize = 8;
+  const int kNoiseSize = 5;
 
   // The numer of screen-space samples to use in the computation.
   const int kTapCount = 8;
@@ -93,7 +93,7 @@ constexpr char g_fragment_shader[] = R"GLSL(
   }
 
   void main() {
-    vec2 seed = texture2D(u_noise, gl_FragCoord.xy / float(kNoiseSize)).rg;
+    vec2 seed = texture2D(u_noise, fract(gl_FragCoord.xy / float(kNoiseSize))).rg;
 
     float fragment_depth_uv = texture2D(u_depth_map, fragment_uv).r;
     float fragment_z = fragment_depth_uv * -u_viewing_volume.z;

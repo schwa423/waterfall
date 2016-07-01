@@ -25,6 +25,9 @@ constexpr char g_fragment_shader[] = R"GLSL(
 
   const float scene_depth = 26.0;
 
+  // Related to OcclusionDetector::kNoiseSize.
+  // We need the reconstruction filter to remove exactly the frequency of the
+  // noise, which is why these values need to be coordinated.
   #define RADIUS 4
 
   void main() {
