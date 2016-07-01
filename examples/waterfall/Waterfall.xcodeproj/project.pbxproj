@@ -44,7 +44,6 @@
 		97ED1BF81D24C96F0080360C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97ED1BEE1D24C96F0080360C /* Assets.xcassets */; };
 		97ED1BF91D24C96F0080360C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97ED1BEF1D24C96F0080360C /* LaunchScreen.storyboard */; };
 		97ED1BFA1D24C96F0080360C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97ED1BF11D24C96F0080360C /* Main.storyboard */; };
-		97ED1BFB1D24C96F0080360C /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 97ED1BF31D24C96F0080360C /* Info.plist */; };
 		97ED1BFC1D24C96F0080360C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 97ED1BF41D24C96F0080360C /* main.m */; };
 		97ED1BFD1D24C96F0080360C /* WaterfallViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 97ED1BF61D24C96F0080360C /* WaterfallViewController.mm */; };
 		97ED1C041D24FC090080360C /* texture_cache.cc in Sources */ = {isa = PBXBuildFile; fileRef = 97ED1BFF1D24FC090080360C /* texture_cache.cc */; };
@@ -425,7 +424,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				97ED1BFB1D24C96F0080360C /* Info.plist in Resources */,
 				97ED1BFA1D24C96F0080360C /* Main.storyboard in Resources */,
 				97ED1BF81D24C96F0080360C /* Assets.xcassets in Resources */,
 				97ED1BF91D24C96F0080360C /* LaunchScreen.storyboard in Resources */,
