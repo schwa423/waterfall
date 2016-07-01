@@ -157,6 +157,7 @@ MaterialShader::~MaterialShader() {}
 void MaterialShader::Use(const glm::mat4& matrix) const {
   glUseProgram(program_.id());
   glEnableVertexAttribArray(position_);
+  // TODO(jjosh): simply check if uv_ != -1 ?
   if (descriptor_.mask == Modifier::Mask::kCircular)
     glEnableVertexAttribArray(uv_);
   glUniformMatrix4fv(matrix_, 1, GL_FALSE, &matrix[0][0]);
@@ -226,6 +227,9 @@ bool MaterialShader::Compile() {
         glGetUniformLocation(program_.id(), "u_displacement_params1");
     ESCHER_DCHECK(displacement_params1_ != -1);
   }
+
+  position_ = glGetAttribLocation(program_.id(), "a_position");
+  ESCHER_DCHECK(position_ != -1);
 
   if (NeedsUV()) {
     uv_ = glGetAttribLocation(program_.id(), "a_uv");

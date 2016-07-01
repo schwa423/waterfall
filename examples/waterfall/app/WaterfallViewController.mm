@@ -49,10 +49,8 @@ static const bool kDrawShadowTestScene = false;
     NSLog(@"Failed to initialize renderer");
   }
 
-  CGFloat contentScaleFactor = self.view.contentScaleFactor;
   CGSize size = self.view.bounds.size;
-  focus_ = glm::vec2(size.width * contentScaleFactor / 2.0f,
-                     size.height * contentScaleFactor / 2.0f);
+  focus_ = glm::vec2(size.width / 2.0f, size.height / 2.0f);
   [self update];
 }
 
@@ -88,10 +86,9 @@ static const bool kDrawShadowTestScene = false;
 }
 
 - (void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event {
-    CGFloat scale = self.view.contentScaleFactor;
     for (UITouch* touch in touches) {
         CGPoint windowCoordinates = [touch locationInView:nil];
-        focus_ = glm::vec2(scale * windowCoordinates.x, scale * windowCoordinates.y);
+        focus_ = glm::vec2(windowCoordinates.x, windowCoordinates.y);
     }
     [self.view setNeedsDisplay];
 }
