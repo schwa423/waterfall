@@ -11,6 +11,7 @@
 #include "escher/geometry/quad.h"
 #include "escher/geometry/size_i.h"
 #include "escher/gl/frame_buffer.h"
+#include "escher/gl/texture_cache.h"
 #include "escher/rendering/model_renderer.h"
 #include "escher/scene/stage.h"
 #include "escher/scene/model.h"
@@ -44,10 +45,10 @@ class Renderer {
   void DrawFullFrameQuad(GLint position);
 
   GLuint front_frame_buffer_id_ = 0;
+  TextureCache texture_cache_;
   SizeI size_;
   FrameBuffer scene_buffer_;
   FrameBuffer lighting_buffer_;
-  UniqueTexture scratch_texture_;
   Quad full_frame_;
 
   BlitShader blit_shader_;

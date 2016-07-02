@@ -19,9 +19,7 @@ constexpr bool kFilterLightingBuffer = true;
 
 }  // namespace
 
-Renderer::Renderer()
-    : scene_buffer_(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT),
-      lighting_buffer_(GL_COLOR_BUFFER_BIT) {}
+Renderer::Renderer() {}
 
 Renderer::~Renderer() {}
 
@@ -34,6 +32,9 @@ bool Renderer::Init() {
   glCullFace(GL_BACK);
   glEnable(GL_CULL_FACE);
 
+  scene_buffer_ = FrameBuffer::Make();
+  lighting_buffer_ = FrameBuffer::Make();
+
   noise_texture_ = MakeNoiseTexture(
       SizeI(OcclusionDetector::kNoiseSize, OcclusionDetector::kNoiseSize));
 
@@ -45,14 +46,13 @@ bool Renderer::Init() {
 
 void Renderer::ResizeBuffers(const SizeI& size) {
   ESCHER_DCHECK(!size_.Equals(size));
-  if (!scene_buffer_.SetSize(size) || !lighting_buffer_.SetSize(size)) {
-    std::cerr << "Failed to allocate frame buffer of size (" << size.width()
-              << ", " << size.height() << ")." << std::endl;
-    exit(1);
-  }
-
-  scratch_texture_ = MakeColorTexture(size);
   size_ = size;
+  scene_buffer_.Bind();
+  scene_buffer_.SetDepth(texture_cache_.GetDepthTexture(size));
+  scene_buffer_.SetColor(texture_cache_.GetColorTexture(size));
+  lighting_buffer_.Bind();
+  lighting_buffer_.SetColor(texture_cache_.GetColorTexture(size));
+  glViewport(0, 0, size_.width(), size_.height());
 }
 
 void Renderer::Render(const Stage& stage, const Model& model) {
@@ -60,7 +60,6 @@ void Renderer::Render(const Stage& stage, const Model& model) {
     ResizeBuffers(stage.physical_size());
 
   glm::mat4 matrix = stage.viewing_volume().GetProjectionMatrix();
-  glViewport(0, 0, size_.width(), size_.height());
 
   model_renderer_.DrawModel(stage, model, matrix, scene_buffer_.frame_buffer());
 
@@ -84,7 +83,7 @@ void Renderer::Render(const Stage& stage, const Model& model) {
 }
 
 void Renderer::ComputeIllumination(const Stage& stage) {
-  glBindFramebuffer(GL_FRAMEBUFFER, lighting_buffer_.frame_buffer().id());
+  lighting_buffer_.Bind();
   glClear(GL_COLOR_BUFFER_BIT);
   glUseProgram(occlusion_detector_.program().id());
   glUniform1i(occlusion_detector_.depth_map(), 0);
@@ -104,26 +103,26 @@ void Renderer::ComputeIllumination(const Stage& stage) {
   DrawFullFrameQuad(occlusion_detector_.position());
 
   if (kFilterLightingBuffer) {
-    scratch_texture_ =
-        lighting_buffer_.SetColorTexture(std::move(scratch_texture_));
+    Texture illumination = lighting_buffer_.SwapColor(
+        texture_cache_.GetColorTexture(size_));
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(reconstruction_filter_.program().id());
     glUniform1i(reconstruction_filter_.illumination_map(), 0);
     glUniform2f(reconstruction_filter_.tap_stride(), 1.0f / size_.width(),
                 0.0f);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, scratch_texture_.id());
+    glBindTexture(GL_TEXTURE_2D, illumination.id());
     glEnableVertexAttribArray(reconstruction_filter_.position());
     DrawFullFrameQuad(occlusion_detector_.position());
 
-    scratch_texture_ =
-        lighting_buffer_.SetColorTexture(std::move(scratch_texture_));
+    illumination = lighting_buffer_.SwapColor(std::move(illumination));
     glUniform2f(reconstruction_filter_.tap_stride(), 0.0f,
                 1.0f / size_.height());
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, scratch_texture_.id());
+    glBindTexture(GL_TEXTURE_2D, illumination.id());
     glEnableVertexAttribArray(reconstruction_filter_.position());
     DrawFullFrameQuad(occlusion_detector_.position());
+    texture_cache_.PutTexture(std::move(illumination));
   }
 }
 

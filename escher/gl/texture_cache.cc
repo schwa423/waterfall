@@ -34,6 +34,7 @@ Texture TextureCache::GetTexture(const TextureDescriptor& descriptor) {
 }
 
 void TextureCache::PutTexture(Texture texture) {
+  ESCHER_DCHECK(texture);
   cache_.emplace(texture.descriptor(), texture.TakeUniqueTexture());
 }
 
