@@ -54,7 +54,7 @@ constexpr char g_fragment_shader[] = R"GLSL(
   const vec2 kSpirals = vec2(7.0, 5.0);
 
   // TODO(abarth): Make the shader less sensitive to this parameter.
-  const float kSampleHemisphereRadius = 16.0;  // screen pixels.
+  const float kSampleRadius = 16.0;  // screen pixels.
 
   float sampleKeyIllumination(vec2 fragment_uv,
                               float fragment_z,
@@ -62,34 +62,28 @@ constexpr char g_fragment_shader[] = R"GLSL(
                               vec2 seed) {
     float key_light_dispersion = u_key_light.z;
     vec2 key_light0 = u_key_light.xy - key_light_dispersion / 2.0;
-    vec2 polar = key_light0 + fract(seed + alpha * kSpirals) * key_light_dispersion;
-    float theta = polar.x;
-    float phi = polar.y;
-    float radius = alpha * kSampleHemisphereRadius;
+    float theta = key_light0.x + fract(seed.x + alpha * kSpirals.x) * key_light_dispersion;
+    float radius = alpha * kSampleRadius;
 
-    vec2 tap_delta_uv = radius * sin(phi) * vec2(cos(theta), sin(theta)) / u_viewing_volume.xy;
+    vec2 tap_delta_uv = radius * vec2(cos(theta), sin(theta)) / u_viewing_volume.xy;
     float tap_depth_uv = texture2D(u_depth_map, fragment_uv + tap_delta_uv).r;
     float tap_z = tap_depth_uv * -u_viewing_volume.z;
 
-    float z = fragment_z + radius * abs(cos(phi));
-    return float(z > tap_z);
+    return 1.0 - max(0.0, (tap_z - fragment_z) / radius);
   }
 
   float sampleFillIllumination(vec2 fragment_uv,
                                float fragment_z,
                                float alpha,
                                vec2 seed) {
-    vec2 polar = 2.0 * kPi * (seed + alpha * kSpirals);
-    float theta = polar.x;
-    float phi = polar.y;
-    float radius = alpha * kSampleHemisphereRadius;
+    float theta = 2.0 * kPi * (seed.x + alpha * kSpirals.x);
+    float radius = alpha * kSampleRadius;
 
-    vec2 tap_delta_uv = radius * sin(phi) * vec2(cos(theta), sin(theta)) / u_viewing_volume.xy;
+    vec2 tap_delta_uv = radius * vec2(cos(theta), sin(theta)) / u_viewing_volume.xy;
     float tap_depth_uv = texture2D(u_depth_map, fragment_uv + tap_delta_uv).r;
     float tap_z = tap_depth_uv * -u_viewing_volume.z;
 
-    float z = fragment_z + radius * abs(cos(phi));
-    return float(z > tap_z);
+    return 1.0 - max(0.0, (tap_z - fragment_z) / radius);
   }
 
   void main() {
