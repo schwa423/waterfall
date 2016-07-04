@@ -51,6 +51,12 @@ void FrameBuffer::SetColor(Texture color) {
   ESCHER_DCHECK(CheckStatusIfDebug());
 }
 
+Texture FrameBuffer::TakeColor() {
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                         0, 0);
+  return std::move(color_);
+}
+
 Texture FrameBuffer::SwapColor(Texture color) {
   Texture result = std::move(color_);
   SetColor(std::move(color));

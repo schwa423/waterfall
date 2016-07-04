@@ -6,6 +6,7 @@
 
 #include "escher/base/macros.h"
 #include "escher/gl/unique_program.h"
+#include "escher/gl/unique_texture.h"
 
 namespace escher {
 
@@ -27,8 +28,7 @@ class OcclusionDetector {
   // Attributes
   GLint position() const { return position_; }
 
-  // Must match fragment shader and RADIUS in IlluminationReconstructionFilter.
-  static const int kNoiseSize = 5;
+  const UniqueTexture& noise_texture() const { return noise_texture_; }
 
  private:
   UniqueProgram program_;
@@ -38,6 +38,8 @@ class OcclusionDetector {
   GLint viewing_volume_ = 0;
   GLint key_light_ = 0;
   GLint position_ = 0;
+
+  UniqueTexture noise_texture_;
 
   ESCHER_DISALLOW_COPY_AND_ASSIGN(OcclusionDetector);
 };

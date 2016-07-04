@@ -19,8 +19,8 @@ class IlluminationShader {
   const UniqueProgram& program() const { return program_; }
 
   // Uniforms
-  GLint scene() const { return scene_; }
-  GLint lighting() const { return lighting_; }
+  GLint color() const { return color_; }
+  GLint illumination() const { return illumination_; }
 
   // Attributes
   GLint position() const { return position_; }
@@ -28,8 +28,8 @@ class IlluminationShader {
  private:
   UniqueProgram program_;
 
-  GLint scene_ = 0;
-  GLint lighting_ = 0;
+  GLint color_ = 0;
+  GLint illumination_ = 0;
   GLint position_ = 0;
 
   ESCHER_DISALLOW_COPY_AND_ASSIGN(IlluminationShader);

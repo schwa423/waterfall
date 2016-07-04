@@ -70,9 +70,7 @@ escher::Model AppTestScene::GetModel(const escher::ViewingVolume& volume,
 
   // fab
   objects.emplace_back(
-      escher::Shape::CreateCircle(
-          glm::vec2(focus.x - kFabSize / 2.0f, focus.y - kFabSize / 2.0f),
-          kFabSize / 2.0f, 6.0f),
+      escher::Shape::CreateCircle(focus, kFabSize / 2.0f, 6.0f),
       &fab_material_);
 
   return escher::Model(std::move(objects));

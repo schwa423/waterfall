@@ -34,6 +34,7 @@ class FrameBuffer {
   void SetDepth(Texture depth);
   void SetColor(Texture color);
 
+  Texture TakeColor();
   Texture SwapColor(Texture color);
 
  private:

@@ -19,8 +19,8 @@ class IlluminationReconstructionFilter {
   const UniqueProgram& program() const { return program_; }
 
   // Uniforms
-  GLint illumination_map() const { return illumination_map_; }
-  GLint tap_stride() const { return tap_stride_; }
+  GLint illumination() const { return illumination_; }
+  GLint stride() const { return stride_; }
 
   // Attributes
   GLint position() const { return position_; }
@@ -28,8 +28,8 @@ class IlluminationReconstructionFilter {
  private:
   UniqueProgram program_;
 
-  GLint illumination_map_ = 0;
-  GLint tap_stride_ = 0;
+  GLint illumination_ = 0;
+  GLint stride_ = 0;
   GLint position_ = 0;
 
   ESCHER_DISALLOW_COPY_AND_ASSIGN(IlluminationReconstructionFilter);

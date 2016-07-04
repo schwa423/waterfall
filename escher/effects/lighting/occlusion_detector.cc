@@ -2,10 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "escher/shaders/lighting/occlusion_detector.h"
+#include "escher/effects/lighting/occlusion_detector.h"
+
+#include "escher/effects/lighting/noise_texture.h"
 
 namespace escher {
 namespace {
+
+// Must match fragment shader and RADIUS in IlluminationReconstructionFilter.
+constexpr int kNoiseSize = 5;
 
 constexpr char g_vertex_shader[] = R"GLSL(
   attribute vec3 a_position;
@@ -126,6 +131,8 @@ bool OcclusionDetector::Compile() {
   ESCHER_DCHECK(viewing_volume_ != -1);
   key_light_ = glGetUniformLocation(program_.id(), "u_key_light");
   ESCHER_DCHECK(key_light_ != -1);
+
+  noise_texture_ = MakeNoiseTexture(SizeI(kNoiseSize, kNoiseSize));
   return true;
 }
 

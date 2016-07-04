@@ -24,6 +24,7 @@ class Texture {
 
   const TextureDescriptor& descriptor() const { return descriptor_; };
   GLuint id() const { return texture_.id(); }
+  const SizeI& size() const { return descriptor_.size; }
 
   explicit operator bool() const { return static_cast<bool>(texture_); }
 
