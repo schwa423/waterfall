@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		971538A51D2DC32800EE4821 /* logging.cc in Sources */ = {isa = PBXBuildFile; fileRef = 971538A41D2DC32800EE4821 /* logging.cc */; };
+		971538A91D2DC77A00EE4821 /* debugger.cc in Sources */ = {isa = PBXBuildFile; fileRef = 971538A71D2DC77A00EE4821 /* debugger.cc */; };
 		97254BE61D1B92B3002980D5 /* unique_shader.cc in Sources */ = {isa = PBXBuildFile; fileRef = 97254BE41D1B92B3002980D5 /* unique_shader.cc */; };
 		97254BE91D1B92C9002980D5 /* shape.cc in Sources */ = {isa = PBXBuildFile; fileRef = 97254BE71D1B92C9002980D5 /* shape.cc */; };
 		97254BEC1D1B92E5002980D5 /* glsl_generator.cc in Sources */ = {isa = PBXBuildFile; fileRef = 97254BEA1D1B92E5002980D5 /* glsl_generator.cc */; };
@@ -53,6 +55,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		971538A41D2DC32800EE4821 /* logging.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logging.cc; sourceTree = "<group>"; };
+		971538A71D2DC77A00EE4821 /* debugger.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debugger.cc; sourceTree = "<group>"; };
+		971538A81D2DC77A00EE4821 /* debugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debugger.h; sourceTree = "<group>"; };
 		97254BE41D1B92B3002980D5 /* unique_shader.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = unique_shader.cc; sourceTree = "<group>"; };
 		97254BE51D1B92B3002980D5 /* unique_shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unique_shader.h; sourceTree = "<group>"; };
 		97254BE71D1B92C9002980D5 /* shape.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = shape.cc; sourceTree = "<group>"; };
@@ -156,6 +161,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		971538A61D2DC77A00EE4821 /* debug */ = {
+			isa = PBXGroup;
+			children = (
+				971538A71D2DC77A00EE4821 /* debugger.cc */,
+				971538A81D2DC77A00EE4821 /* debugger.h */,
+			);
+			path = debug;
+			sourceTree = "<group>";
+		};
 		97254BED1D1B92ED002980D5 /* material */ = {
 			isa = PBXGroup;
 			children = (
@@ -232,6 +246,8 @@
 			isa = PBXGroup;
 			children = (
 				978B78B11D2AFFE400806B19 /* arraysize.h */,
+				971538A61D2DC77A00EE4821 /* debug */,
+				971538A41D2DC32800EE4821 /* logging.cc */,
 				978B78B21D2AFFE400806B19 /* logging.h */,
 				978B78B31D2AFFE400806B19 /* macros.h */,
 				978B78B71D2AFFE400806B19 /* time */,
@@ -470,6 +486,7 @@
 				97E733C51D1A5C9600F62181 /* ambient_light.cc in Sources */,
 				97ED1BF71D24C96F0080360C /* AppDelegate.m in Sources */,
 				9736D08C1D29D098001369BA /* noise_texture.cc in Sources */,
+				971538A91D2DC77A00EE4821 /* debugger.cc in Sources */,
 				9736D0901D29D0A5001369BA /* canvas.cc in Sources */,
 				97ED1BFC1D24C96F0080360C /* main.m in Sources */,
 				97254BF81D1B92ED002980D5 /* material_shader_factory.cc in Sources */,
@@ -494,6 +511,7 @@
 				97E733A51D1A5C7F00F62181 /* unique_program.cc in Sources */,
 				97254BE61D1B92B3002980D5 /* unique_shader.cc in Sources */,
 				978372D21D1D9AFE00B0AB77 /* displacement.cc in Sources */,
+				971538A51D2DC32800EE4821 /* logging.cc in Sources */,
 				97254BF91D1B92ED002980D5 /* modifier.cc in Sources */,
 				97E733A31D1A5C7F00F62181 /* frame_buffer.cc in Sources */,
 			);
