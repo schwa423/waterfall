@@ -4,6 +4,7 @@
 
 #include "escher/effects/lighting/occlusion_detector.h"
 
+#include "ftl/logging.h"
 #include "escher/effects/lighting/noise_texture.h"
 
 namespace escher {
@@ -124,13 +125,13 @@ bool OcclusionDetector::Compile() {
   if (!program_)
     return false;
   depth_map_ = glGetUniformLocation(program_.id(), "u_depth_map");
-  ESCHER_DCHECK(depth_map_ != -1);
+  FTL_DCHECK(depth_map_ != -1);
   noise_ = glGetUniformLocation(program_.id(), "u_noise");
-  ESCHER_DCHECK(noise_ != -1);
+  FTL_DCHECK(noise_ != -1);
   viewing_volume_ = glGetUniformLocation(program_.id(), "u_viewing_volume");
-  ESCHER_DCHECK(viewing_volume_ != -1);
+  FTL_DCHECK(viewing_volume_ != -1);
   key_light_ = glGetUniformLocation(program_.id(), "u_key_light");
-  ESCHER_DCHECK(key_light_ != -1);
+  FTL_DCHECK(key_light_ != -1);
 
   noise_texture_ = MakeNoiseTexture(SizeI(kNoiseSize, kNoiseSize));
   return true;

@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "escher/base/macros.h"
+#include "ftl/macros.h"
 #include "escher/gl/unique_program.h"
 
 namespace escher {
@@ -32,7 +32,7 @@ class IlluminationReconstructionFilter {
   GLint stride_ = 0;
   GLint position_ = 0;
 
-  ESCHER_DISALLOW_COPY_AND_ASSIGN(IlluminationReconstructionFilter);
+  FTL_DISALLOW_COPY_AND_ASSIGN(IlluminationReconstructionFilter);
 };
 
 }  // namespace escher

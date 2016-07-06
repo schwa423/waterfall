@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "escher/base/macros.h"
+#include "ftl/macros.h"
 #include "escher/geometry/size_i.h"
 #include "escher/gl/texture_descriptor.h"
 #include "escher/gl/unique_texture.h"
@@ -34,7 +34,7 @@ class Texture {
   TextureDescriptor descriptor_;
   UniqueTexture texture_;
 
-  ESCHER_DISALLOW_COPY_AND_ASSIGN(Texture);
+  FTL_DISALLOW_COPY_AND_ASSIGN(Texture);
 };
 
 }  // namespace escher

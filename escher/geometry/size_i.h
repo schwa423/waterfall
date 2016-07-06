@@ -7,7 +7,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 
-#include "escher/base/macros.h"
+#include "ftl/macros.h"
 
 namespace escher {
 

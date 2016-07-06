@@ -6,8 +6,7 @@
 
 #include <glm/glm.hpp>
 
-#include "escher/base/macros.h"
-#include "escher/base/time.h"
+#include "ftl/macros.h"
 #include "escher/effects/lighting/lighting_effect.h"
 #include "escher/geometry/quad.h"
 #include "escher/geometry/size_i.h"
@@ -47,7 +46,7 @@ class Renderer {
 
   ModelRenderer model_renderer_;
 
-  ESCHER_DISALLOW_COPY_AND_ASSIGN(Renderer);
+  FTL_DISALLOW_COPY_AND_ASSIGN(Renderer);
 };
 
 }  // namespace escher

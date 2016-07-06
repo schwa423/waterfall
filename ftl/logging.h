@@ -2,12 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "escher/base/time.h"
+#pragma once
 
-namespace escher {
+#include <assert.h>
 
-TimePoint Now() {
-  return std::chrono::steady_clock::now();
-}
-
-}  // namespace escher
+#define FTL_DCHECK(expr) assert(expr)

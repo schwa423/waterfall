@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "escher/base/macros.h"
+#include "ftl/macros.h"
 #include "escher/gl/unique_program.h"
 #include "escher/gl/unique_texture.h"
 
@@ -41,7 +41,7 @@ class OcclusionDetector {
 
   UniqueTexture noise_texture_;
 
-  ESCHER_DISALLOW_COPY_AND_ASSIGN(OcclusionDetector);
+  FTL_DISALLOW_COPY_AND_ASSIGN(OcclusionDetector);
 };
 
 }  // namespace escher

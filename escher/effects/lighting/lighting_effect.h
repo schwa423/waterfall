@@ -6,7 +6,7 @@
 
 #include <glm/glm.hpp>
 
-#include "escher/base/macros.h"
+#include "ftl/macros.h"
 #include "escher/effects/lighting/illumination_reconstruction_filter.h"
 #include "escher/effects/lighting/illumination_shader.h"
 #include "escher/effects/lighting/occlusion_detector.h"
@@ -37,7 +37,7 @@ class LightingEffect {
   OcclusionDetector occlusion_detector_;
   Quad full_frame_;
 
-  ESCHER_DISALLOW_COPY_AND_ASSIGN(LightingEffect);
+  FTL_DISALLOW_COPY_AND_ASSIGN(LightingEffect);
 };
 
 }  // namespace escher

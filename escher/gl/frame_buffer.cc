@@ -6,6 +6,8 @@
 
 #include <iostream>
 
+#include "ftl/logging.h"
+
 namespace escher {
 
 FrameBuffer::FrameBuffer() {}
@@ -36,19 +38,19 @@ void FrameBuffer::Bind() {
 }
 
 void FrameBuffer::SetDepth(Texture depth) {
-  ESCHER_DCHECK(IsBound());
+  FTL_DCHECK(IsBound());
   depth_ = std::move(depth);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,
                          depth_.id(), 0);
-  ESCHER_DCHECK(CheckStatusIfDebug());
+  FTL_DCHECK(CheckStatusIfDebug());
 }
 
 void FrameBuffer::SetColor(Texture color) {
-  ESCHER_DCHECK(IsBound());
+  FTL_DCHECK(IsBound());
   color_ = std::move(color);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
                          color_.id(), 0);
-  ESCHER_DCHECK(CheckStatusIfDebug());
+  FTL_DCHECK(CheckStatusIfDebug());
 }
 
 Texture FrameBuffer::TakeColor() {

@@ -100,7 +100,7 @@ void ModelRenderer::DrawContext::BindMaterial(const Material& material,
 
 void ModelRenderer::DrawContext::UseMaterialShader(
     const MaterialShader* shader) {
-  ESCHER_DCHECK(shader);
+  FTL_DCHECK(shader);
 
   if (shader == shader_)
     return;

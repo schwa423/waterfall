@@ -4,7 +4,7 @@
 
 #include "examples/waterfall/scenes/app_test_scene.h"
 
-#include "escher/base/arraysize.h"
+#include "ftl/arraysize.h"
 #include "escher/renderer.h"
 
 namespace {

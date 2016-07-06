@@ -4,6 +4,8 @@
 
 #include "escher/effects/lighting/illumination_shader.h"
 
+#include "ftl/logging.h"
+
 namespace escher {
 namespace {
 
@@ -41,9 +43,9 @@ bool IlluminationShader::Compile() {
   if (!program_)
     return false;
   color_ = glGetUniformLocation(program_.id(), "u_color");
-  ESCHER_DCHECK(color_ != -1);
+  FTL_DCHECK(color_ != -1);
   illumination_ = glGetUniformLocation(program_.id(), "u_illumination");
-  ESCHER_DCHECK(illumination_ != -1);
+  FTL_DCHECK(illumination_ != -1);
   return true;
 }
 

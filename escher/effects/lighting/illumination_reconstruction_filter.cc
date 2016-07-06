@@ -4,6 +4,8 @@
 
 #include "escher/effects/lighting/illumination_reconstruction_filter.h"
 
+#include "ftl/logging.h"
+
 namespace escher {
 namespace {
 
@@ -69,9 +71,9 @@ bool IlluminationReconstructionFilter::Compile() {
   if (!program_)
     return false;
   illumination_ = glGetUniformLocation(program_.id(), "u_illumination");
-  ESCHER_DCHECK(illumination_ != -1);
+  FTL_DCHECK(illumination_ != -1);
   stride_ = glGetUniformLocation(program_.id(), "u_stride");
-  ESCHER_DCHECK(stride_ != -1);
+  FTL_DCHECK(stride_ != -1);
   return true;
 }
 

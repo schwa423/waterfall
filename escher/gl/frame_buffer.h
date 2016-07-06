@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "escher/base/macros.h"
+#include "ftl/macros.h"
 #include "escher/geometry/size_i.h"
 #include "escher/gl/unique_frame_buffer.h"
 #include "escher/gl/texture.h"
@@ -45,7 +45,7 @@ class FrameBuffer {
   Texture depth_;
   Texture color_;
 
-  ESCHER_DISALLOW_COPY_AND_ASSIGN(FrameBuffer);
+  FTL_DISALLOW_COPY_AND_ASSIGN(FrameBuffer);
 };
 
 }  // namespace escher

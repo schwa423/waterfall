@@ -6,7 +6,7 @@
 
 #include <glm/glm.hpp>
 
-#include "escher/base/macros.h"
+#include "ftl/macros.h"
 #include "escher/gl/unique_frame_buffer.h"
 #include "escher/scene/model.h"
 #include "escher/scene/stage.h"
@@ -46,7 +46,7 @@ class ModelRenderer {
 
   MaterialShaderFactory material_shader_factory_;
 
-  ESCHER_DISALLOW_COPY_AND_ASSIGN(ModelRenderer);
+  FTL_DISALLOW_COPY_AND_ASSIGN(ModelRenderer);
 };
 
 }  // namespace escher

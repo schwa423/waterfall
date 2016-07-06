@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "escher/base/macros.h"
+#include "ftl/macros.h"
 #include "escher/scene/model.h"
 #include "escher/scene/viewing_volume.h"
 
@@ -24,5 +24,5 @@ class AppTestScene {
   escher::Material green_material_;
   escher::Material null_material_;
 
-  ESCHER_DISALLOW_COPY_AND_ASSIGN(AppTestScene);
+  FTL_DISALLOW_COPY_AND_ASSIGN(AppTestScene);
 };
