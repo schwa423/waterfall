@@ -11,7 +11,7 @@
 #include "examples/waterfall/scenes/material_stage.h"
 #include "examples/waterfall/scenes/shadow_test_scene.h"
 
-static const bool kDrawShadowTestScene = false;
+constexpr bool kDrawShadowTestScene = false;
 
 @interface WaterfallViewController () {
   escher::Stage stage_;
@@ -83,7 +83,8 @@ static const bool kDrawShadowTestScene = false;
 
   if (kDrawShadowTestScene)
     renderer_->Render(stage_, shadow_test_scene_.GetModel(stage_.viewing_volume()));
-  renderer_->Render(stage_, app_test_scene_.GetModel(stage_.viewing_volume(), focus_));
+  else
+    renderer_->Render(stage_, app_test_scene_.GetModel(stage_.viewing_volume(), focus_));
 }
 
 - (void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event {

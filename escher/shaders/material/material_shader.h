@@ -6,7 +6,7 @@
 
 #include <glm/glm.hpp>
 
-#include "escher/base/macros.h"
+#include "ftl/macros.h"
 #include "escher/gl/unique_program.h"
 #include "escher/scene/material.h"
 #include "escher/scene/stage.h"
@@ -59,7 +59,7 @@ class MaterialShader {
   GLint texture_ = -1;
   GLint texture_matrix_ = -1;
 
-  ESCHER_DISALLOW_COPY_AND_ASSIGN(MaterialShader);
+  FTL_DISALLOW_COPY_AND_ASSIGN(MaterialShader);
 };
 
 }  // namespace escher

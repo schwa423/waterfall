@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "escher/textures/noise_texture.h"
+#include "escher/effects/lighting/noise_texture.h"
 
 #include <memory>
 #include <random>

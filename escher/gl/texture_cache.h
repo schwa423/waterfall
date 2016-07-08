@@ -6,7 +6,7 @@
 
 #include <unordered_map>
 
-#include "escher/base/macros.h"
+#include "ftl/macros.h"
 #include "escher/geometry/size_i.h"
 #include "escher/gl/texture.h"
 #include "escher/gl/unique_texture.h"
@@ -31,7 +31,7 @@ class TextureCache {
                           UniqueTexture,
                           TextureDescriptor::Hash> cache_;
 
-  ESCHER_DISALLOW_COPY_AND_ASSIGN(TextureCache);
+  FTL_DISALLOW_COPY_AND_ASSIGN(TextureCache);
 };
 
 }  // namespace escher

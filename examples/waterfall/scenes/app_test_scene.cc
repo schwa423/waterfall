@@ -4,9 +4,9 @@
 
 #include "examples/waterfall/scenes/app_test_scene.h"
 
-#include "escher/base/arraysize.h"
 #include "escher/gl/bindings.h"
 #include "escher/renderer.h"
+#include "ftl/arraysize.h"
 
 namespace {
 
@@ -43,7 +43,7 @@ void AppTestScene::InitGL() {
        0, 0, 0, 255, 255, 255, 255, 255};
   GLuint texture = 0;
   glGenTextures(1, &texture);
-  ESCHER_DCHECK(texture != 0);
+  FTL_DCHECK(texture != 0);
   glBindTexture(GL_TEXTURE_2D, texture);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE,
       &(checkerboard[0]));
@@ -100,9 +100,7 @@ escher::Model AppTestScene::GetModel(const escher::ViewingVolume& volume,
 
   // fab
   objects.emplace_back(
-      escher::Shape::CreateCircle(
-          glm::vec2(focus.x - kFabSize / 2.0f, focus.y - kFabSize / 2.0f),
-          kFabSize / 2.0f, 6.0f),
+      escher::Shape::CreateCircle(focus, kFabSize / 2.0f, 6.0f),
       &fab_material_);
 
   return escher::Model(std::move(objects));

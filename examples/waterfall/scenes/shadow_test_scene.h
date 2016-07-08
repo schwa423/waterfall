@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "escher/base/macros.h"
+#include "ftl/macros.h"
 #include "escher/scene/model.h"
 #include "escher/scene/viewing_volume.h"
 
@@ -18,5 +18,5 @@ class ShadowTestScene {
  private:
   escher::Material card_material_;
 
-  ESCHER_DISALLOW_COPY_AND_ASSIGN(ShadowTestScene);
+  FTL_DISALLOW_COPY_AND_ASSIGN(ShadowTestScene);
 };

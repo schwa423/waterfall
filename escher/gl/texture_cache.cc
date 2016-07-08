@@ -4,6 +4,8 @@
 
 #include "escher/gl/texture_cache.h"
 
+#include "ftl/logging.h"
+
 namespace escher {
 
 TextureCache::TextureCache() {}
@@ -34,6 +36,7 @@ Texture TextureCache::GetTexture(const TextureDescriptor& descriptor) {
 }
 
 void TextureCache::PutTexture(Texture texture) {
+  FTL_DCHECK(texture);
   cache_.emplace(texture.descriptor(), texture.TakeUniqueTexture());
 }
 

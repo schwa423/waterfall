@@ -6,6 +6,7 @@
 
 #include <math.h>
 
+#include "ftl/logging.h"
 #include "escher/shaders/glsl_generator.h"
 
 namespace escher {
@@ -182,7 +183,7 @@ void MaterialShader::Bind(const Stage& stage,
     glUniform4fv(color_, 1, &color[0]);
   }
 
-  ESCHER_DCHECK(material.has_texture() == descriptor_.has_texture);
+  FTL_DCHECK(material.has_texture() == descriptor_.has_texture);
   if (material.has_texture()) {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, material.texture());
@@ -232,35 +233,35 @@ bool MaterialShader::Compile() {
     return false;
 
   matrix_ = glGetUniformLocation(program_.id(), "u_matrix");
-  ESCHER_DCHECK(matrix_ != -1);
+  FTL_DCHECK(matrix_ != -1);
 
   if (descriptor_.color_binding_type == BindingType::kConstant) {
     color_ = glGetUniformLocation(program_.id(), "u_color");
-    ESCHER_DCHECK(color_ != -1);
+    FTL_DCHECK(color_ != -1);
   }
 
   if (descriptor_.displacement != Displacement::Type::kNone) {
     displacement_params0_ =
         glGetUniformLocation(program_.id(), "u_displacement_params0");
-    ESCHER_DCHECK(displacement_params0_ != -1);
+    FTL_DCHECK(displacement_params0_ != -1);
     displacement_params1_ =
         glGetUniformLocation(program_.id(), "u_displacement_params1");
-    ESCHER_DCHECK(displacement_params1_ != -1);
+    FTL_DCHECK(displacement_params1_ != -1);
   }
 
   if (descriptor_.has_texture) {
     texture_ = glGetUniformLocation(program_.id(), "u_texture");
     texture_matrix_ = glGetUniformLocation(program_.id(), "u_texture_matrix");
-    ESCHER_DCHECK(texture_ != -1);
-    ESCHER_DCHECK(texture_matrix_ != -1);
+    FTL_DCHECK(texture_ != -1);
+    FTL_DCHECK(texture_matrix_ != -1);
   }
 
   position_ = glGetAttribLocation(program_.id(), "a_position");
-  ESCHER_DCHECK(position_ != -1);
+  FTL_DCHECK(position_ != -1);
 
   if (NeedsUV()) {
     uv_ = glGetAttribLocation(program_.id(), "a_uv");
-    ESCHER_DCHECK(uv_ != -1);
+    FTL_DCHECK(uv_ != -1);
   }
   return true;
 }

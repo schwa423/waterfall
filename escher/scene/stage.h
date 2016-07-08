@@ -6,7 +6,7 @@
 
 #include <utility>
 
-#include "escher/base/macros.h"
+#include "ftl/macros.h"
 #include "escher/scene/ambient_light.h"
 #include "escher/scene/directional_light.h"
 #include "escher/scene/viewing_volume.h"
@@ -40,7 +40,7 @@ class Stage {
   DirectionalLight key_light_;
   AmbientLight fill_light_;
 
-  ESCHER_DISALLOW_COPY_AND_ASSIGN(Stage);
+  FTL_DISALLOW_COPY_AND_ASSIGN(Stage);
 };
 
 }  // namespace escher

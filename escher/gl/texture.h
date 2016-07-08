@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "escher/base/macros.h"
+#include "ftl/macros.h"
 #include "escher/geometry/size_i.h"
 #include "escher/gl/texture_descriptor.h"
 #include "escher/gl/unique_texture.h"
@@ -24,6 +24,7 @@ class Texture {
 
   const TextureDescriptor& descriptor() const { return descriptor_; };
   GLuint id() const { return texture_.id(); }
+  const SizeI& size() const { return descriptor_.size; }
 
   explicit operator bool() const { return static_cast<bool>(texture_); }
 
@@ -33,7 +34,7 @@ class Texture {
   TextureDescriptor descriptor_;
   UniqueTexture texture_;
 
-  ESCHER_DISALLOW_COPY_AND_ASSIGN(Texture);
+  FTL_DISALLOW_COPY_AND_ASSIGN(Texture);
 };
 
 }  // namespace escher
